@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "slug": "test",
+    "title": "Test",
+    "desc": "test",
+    "date": "2026-06-15",
+    "cover": ""
+  }
+]
