@@ -1,222 +1,241 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Perspective Events - Where founders build what's next</title>
-<meta name="description" content="Perspective Events designs and produces summits and experiences for founders, Shopify, and ecommerce brands. Real rooms, real connections.">
+<meta name="description" content="Perspective Events designs and produces summits, Shopify and e-commerce meetups, private founder dinners and expo experiences across Europe, and puts our partners in the rooms and the press that matter.">
+<meta property="og:title" content="Perspective Events - Where founders build what's next">
+<meta property="og:description" content="Summits, meetups, private dinners and expo experiences that connect the right founders, brands and partners across Europe.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://perspectiveevents.eu">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,700&family=DM+Sans:wght@200;300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Outfit:wght@200;300;400;500&display=swap');
 </style>
 <style>
+  /* ===== 5-COLOUR OCEAN SYSTEM ===== */
   :root{
-    --ink:#2B5F8E;
-    --ink-deep:#22486B;
-    --steel:#6A92B0;
-    --stone:#8A8880;
-    --stone-lt:#B0AEA8;
-    --sand:#E8E2D5;
-    --sand-dark:#D8D2C5;
-    --black:#111210;
-    --ivory:#FBFAF6;
-    --paper:#F4F0E7;
-    --line:#E4DFD4;
+    --foam:#F5EFE3;        /* background */
+    --deep:#0C3354;        /* dark sections + text */
+    --cobalt:#1E6FB0;      /* primary accent */
+    --turq:#5FC2CC;        /* secondary accent */
+    --sand:#D8C6A2;        /* warm neutral */
+    --deep-2:#0A2C49;      /* deeper tone of --deep for depth (same hue) */
+    --line:#E4DBCB;        /* foam-tone hairline */
+    --ink-soft:rgba(12,51,84,.66);
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{background:var(--paper);font-family:'DM Sans',sans-serif;color:var(--black);-webkit-font-smoothing:antialiased;line-height:1.5}
+  body{background:var(--foam);color:var(--deep);font-family:'Outfit',sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
   img{display:block;max-width:100%}
   a{color:inherit;text-decoration:none}
   .wrap{max-width:1200px;margin:0 auto;padding:0 40px}
-  h1,h2,h3,.serif{font-family:'Fraunces',serif;font-weight:600;font-style:normal;letter-spacing:-0.015em}
-  .eyebrow{font-size:11.5px;font-weight:400;letter-spacing:0.24em;text-transform:uppercase;color:var(--stone)}
-  .accent{color:var(--ink)}
+  h1,h2,h3,.serif{font-family:'Playfair Display',serif;font-weight:700;letter-spacing:-0.01em}
+  .eyebrow{font-size:11.5px;font-weight:400;letter-spacing:0.26em;text-transform:uppercase;color:var(--cobalt)}
 
-  /* buttons */
-  .btn{display:inline-flex;align-items:center;gap:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:400;letter-spacing:0.1em;text-transform:uppercase;padding:15px 30px;border-radius:50px;transition:transform .18s,background .22s,color .22s,border-color .22s;cursor:pointer;border:1px solid transparent;white-space:nowrap}
-  .btn-primary{background:var(--ink);color:var(--ivory)}
-  .btn-primary:hover{background:var(--ink-deep);transform:translateY(-2px)}
-  .btn-ghost{background:transparent;color:var(--black);border-color:#CFC9BC}
-  .btn-ghost:hover{border-color:var(--ink);color:var(--ink)}
-  .btn-light{background:var(--ivory);color:var(--black)}
-  .btn-light:hover{background:#fff;transform:translateY(-2px)}
-  .btn-onblack-ghost{background:transparent;color:var(--sand);border-color:rgba(232,226,213,.32)}
-  .btn-onblack-ghost:hover{border-color:var(--sand);color:#fff}
+  .grain{position:absolute;inset:0;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
-  /* nav */
-  .nav{position:sticky;top:0;z-index:200;background:rgba(244,240,231,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  /* living ocean gradient + motion (no photos) */
+  .ocean-bg{position:absolute;inset:0;overflow:hidden;background:linear-gradient(170deg,#0A2C49 0%,#0C3354 26%,#13567F 50%,#1E6FB0 72%,#2E92C8 88%,#5FC2CC 100%)}
+  .ocean-bg .glow{position:absolute;left:50%;top:78%;width:130vw;height:130vw;transform:translate(-50%,-50%);
+    background:radial-gradient(circle at center, rgba(201,232,234,.42), rgba(95,194,204,.16) 32%, transparent 62%);
+    animation:breathe 11s ease-in-out infinite}
+  .ocean-bg .b1,.ocean-bg .b2{position:absolute;border-radius:50%;mix-blend-mode:screen;filter:blur(20px)}
+  .ocean-bg .b1{width:55%;height:70%;left:-12%;top:-8%;background:radial-gradient(circle,rgba(95,194,204,.30),transparent 60%);animation:drift 16s ease-in-out infinite alternate}
+  .ocean-bg .b2{width:60%;height:70%;right:-16%;bottom:-12%;background:radial-gradient(circle,rgba(30,111,176,.40),transparent 60%);animation:breathe 13s ease-in-out infinite}
+  @keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.85}50%{transform:translate(-50%,-53%) scale(1.09);opacity:1}}
+  @keyframes drift{0%{transform:translate(0,0)}100%{transform:translate(5%,-4%)}}
+
+  /* ===== buttons ===== */
+  .btn{display:inline-flex;align-items:center;gap:10px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:400;letter-spacing:0.1em;text-transform:uppercase;padding:15px 30px;border-radius:50px;transition:transform .18s,background .22s,color .22s,border-color .22s;cursor:pointer;border:1px solid transparent;white-space:nowrap}
+  .btn-primary{background:var(--cobalt);color:#fff}
+  .btn-primary:hover{background:#185c93;transform:translateY(-2px)}
+  .btn-ghost{background:transparent;color:var(--deep);border-color:rgba(12,51,84,.25)}
+  .btn-ghost:hover{border-color:var(--cobalt);color:var(--cobalt)}
+  .btn-foam{background:var(--foam);color:var(--deep)}
+  .btn-foam:hover{background:#fff;transform:translateY(-2px)}
+  .btn-onblue-ghost{background:transparent;color:#fff;border-color:rgba(245,239,227,.4)}
+  .btn-onblue-ghost:hover{border-color:#fff;background:rgba(245,239,227,.08)}
+
+  /* ===== nav ===== */
+  .nav{position:sticky;top:0;z-index:200;background:rgba(245,239,227,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
   .nav-in{display:flex;align-items:center;justify-content:space-between;height:74px}
-  .logo{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--black)}
-  .logo span{color:var(--ink)}
+  .logo{font-family:'Playfair Display',serif;font-weight:700;font-size:25px;color:var(--deep)}
+  .logo span{color:var(--cobalt)}
   .nav-links{display:flex;gap:34px;align-items:center}
-  .nav-links a:not(.btn){font-size:14px;font-weight:400;color:var(--stone);transition:color .2s}
-  .nav-links a:not(.btn):hover{color:var(--black)}
+  .nav-links a:not(.btn){font-size:14px;font-weight:400;color:var(--ink-soft);transition:color .2s}
+  .nav-links a:not(.btn):hover{color:var(--deep)}
   .nav .btn{padding:12px 24px}
-  .nav-toggle{display:none;background:none;border:none;font-size:25px;cursor:pointer;color:var(--black)}
+  .nav-toggle{display:none;background:none;border:none;font-size:25px;cursor:pointer;color:var(--deep)}
 
-  /* hero */
-  .hero{padding:118px 0 96px;position:relative;overflow:hidden}
-  .hero::after{content:'';position:absolute;top:-160px;right:-160px;width:520px;height:520px;border-radius:50%;background:var(--ink);opacity:.045}
-  .hero-chip{display:inline-flex;align-items:center;gap:10px;background:var(--ivory);border:1px solid var(--line);padding:9px 18px;border-radius:50px;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink);margin-bottom:38px}
-  .hero-kicker{font-size:13px;font-weight:400;letter-spacing:0.2em;text-transform:uppercase;color:var(--stone);margin-top:22px}
-  .sec-num{display:none}
-  .hero-chip .dot{width:7px;height:7px;border-radius:50%;background:var(--ink)}
-  .hero h1{font-size:clamp(52px,8.2vw,108px);line-height:0.95;color:var(--black);max-width:15ch;font-weight:600}
-  .hero h1 em{font-style:normal;color:var(--ink)}
-  .hero-rule{width:60px;height:2px;background:var(--ink);border-radius:2px;margin:40px 0 28px}
-  .hero-sub{font-size:clamp(17px,2.1vw,21px);font-weight:300;color:#46443f;max-width:58ch;line-height:1.65}
-  .hero-cta{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:46px}
-  .hero-trust{margin-top:42px;font-size:13px;letter-spacing:0.04em;color:var(--stone)}
-  .hero-trust b{color:var(--ink);font-weight:500}
+  /* ===== hero (deep ocean, motion) ===== */
+  .hero{position:relative;min-height:92vh;display:flex;align-items:center;overflow:hidden;color:#fff;text-align:center}
+  .hero-in{position:relative;z-index:3;width:100%}
+  .hero .eyebrow{color:rgba(245,239,227,.85)}
+  .hero h1{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(50px,8.4vw,112px);line-height:0.98;margin:26px 0 0;color:#fff;text-shadow:0 4px 50px rgba(6,26,40,.4)}
+  .hero h1 em{font-style:italic;font-weight:600}
+  .hero-rule{width:64px;height:2px;background:var(--turq);border-radius:2px;margin:34px auto 26px}
+  .hero-sub{font-size:clamp(16px,2vw,20px);font-weight:300;color:rgba(245,239,227,.9);max-width:60ch;margin:0 auto;line-height:1.65}
+  .hero-cta{display:flex;gap:16px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:42px}
+  .hero-trust{margin-top:40px;font-size:13px;letter-spacing:0.05em;color:rgba(245,239,227,.66)}
+  .hero-trust b{color:var(--turq);font-weight:500}
+  .hero-fade{position:absolute;left:0;right:0;bottom:0;height:120px;z-index:2;background:linear-gradient(to bottom,transparent,rgba(95,194,204,.0),var(--foam))}
 
-  /* press */
-  .press{padding:42px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--ivory)}
-  .press-lead{font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--stone);text-align:center;margin-bottom:26px}
-  .press-lead b{color:var(--ink);font-weight:500}
+  /* ===== press ===== */
+  .press{padding:44px 0;border-bottom:1px solid var(--line)}
+  .press-lead{font-size:12px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-soft);text-align:center;margin-bottom:26px}
+  .press-lead b{color:var(--cobalt);font-weight:500}
   .press-row{display:flex;flex-wrap:nowrap;justify-content:space-between;align-items:center;gap:24px}
-  .press-name{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(14px,1.95vw,23px);color:#6f6c66;white-space:nowrap;transition:color .2s}
-  .press-name:hover{color:var(--black)}
-  .press-foot{text-align:center;font-size:12.5px;color:var(--stone-lt);margin-top:24px;letter-spacing:0.03em}
+  .press-name{font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(14px,1.95vw,23px);color:var(--deep);opacity:.72;white-space:nowrap;transition:opacity .2s}
+  .press-name:hover{opacity:1}
+  .press-foot{text-align:center;font-size:12.5px;color:var(--ink-soft);margin-top:24px}
 
-  /* generic section */
+  /* ===== sections ===== */
   section{padding:112px 0}
-  .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:16px}
-  .sec-num{font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink)}
-  .sec-title{font-size:clamp(32px,4.6vw,54px);line-height:1.0;color:var(--black)}
-  .sec-title em{font-style:normal;color:var(--ink)}
-  .sec-intro{font-size:18px;font-weight:300;color:#56544e;max-width:60ch;line-height:1.7;margin-top:20px}
+  .sec-head{margin-bottom:16px}
+  .sec-title{font-size:clamp(34px,5vw,60px);line-height:1.0;color:var(--deep)}
+  .sec-title em{font-style:italic;font-weight:600;color:var(--cobalt)}
+  .sec-intro{font-size:18px;font-weight:300;color:var(--ink-soft);max-width:60ch;line-height:1.7;margin-top:20px}
 
-  /* feature band (black + image) */
-  .feature{background:var(--black);color:var(--ivory)}
-  .feature .wrap{display:grid;grid-template-columns:1.05fr 1fr;gap:64px;align-items:center}
-  .feature .eyebrow{color:rgba(232,226,213,.5)}
-  .feature h2{font-size:clamp(30px,4vw,50px);line-height:1.02;color:var(--ivory);margin:18px 0 22px}
-  .feature h2 em{font-style:normal;color:var(--steel)}
-  .feature p{font-size:17px;font-weight:300;color:rgba(240,237,229,.78);line-height:1.75;max-width:46ch}
-  .feature .btn{margin-top:34px}
-  .feature-img{position:relative;border-radius:20px;overflow:hidden;aspect-ratio:4/3;background:linear-gradient(135deg,var(--ink-deep),var(--black));box-shadow:0 30px 70px -30px rgba(0,0,0,.6)}
-  .feature-img img{width:100%;height:100%;object-fit:cover;position:relative;z-index:1}
-  .feature-img .ph{position:absolute;inset:0;display:flex;align-items:flex-end;padding:26px;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(232,226,213,.6);z-index:0}
+  /* feature band (deep ocean + motion) */
+  .feature{position:relative;color:#fff;overflow:hidden;text-align:center}
+  .feature .inner{position:relative;z-index:3;max-width:880px;margin:0 auto;padding:120px 40px}
+  .feature .eyebrow{color:var(--turq)}
+  .feature h2{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(34px,5vw,62px);line-height:1.04;margin:20px 0 24px;color:#fff}
+  .feature h2 em{font-style:italic;font-weight:600;color:var(--turq)}
+  .feature p{font-size:18px;font-weight:300;color:rgba(245,239,227,.84);line-height:1.8;max-width:54ch;margin:0 auto}
+  .feature .btn{margin-top:38px}
+
+  /* stats (deep ocean) */
+  .stats{position:relative;color:#fff;overflow:hidden}
+  .stats .inner{position:relative;z-index:3;padding:84px 0}
+  .stats .eyebrow{color:var(--turq);text-align:center;display:block;margin-bottom:46px}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px}
+  .stat{text-align:center;position:relative}
+  .stat:not(:last-child)::after{content:'';position:absolute;right:-15px;top:14%;height:72%;width:1px;background:rgba(245,239,227,.16)}
+  .stat-num{font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(46px,6vw,74px);line-height:.9;color:#fff}
+  .stat-num .unit{color:var(--turq);font-size:.6em;vertical-align:super}
+  .stat-label{font-size:14px;font-weight:300;color:rgba(245,239,227,.78);margin-top:14px;line-height:1.45;padding:0 6px}
+  .stats-foot{text-align:center;margin-top:48px;font-size:15px;font-weight:300;color:rgba(245,239,227,.72)}
+  .stats-foot b{color:var(--turq);font-weight:400}
 
   /* why partner */
   .why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:56px}
-  .why{padding:6px 0}
-  .why-ic{width:46px;height:46px;border-radius:12px;background:var(--ink);color:var(--ivory);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:19px;margin-bottom:22px}
-  .why:nth-child(2) .why-ic{background:var(--steel)}
-  .why:nth-child(3) .why-ic{background:var(--black)}
-  .why:nth-child(4) .why-ic{background:var(--ink-deep)}
-  .why h3{font-size:21px;color:var(--black);line-height:1.1;margin-bottom:12px}
-  .why p{font-size:14px;font-weight:300;color:#605e58;line-height:1.65}
+  .why-ic{width:48px;height:48px;border-radius:14px;background:var(--cobalt);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:600;font-size:19px;margin-bottom:22px}
+  .why:nth-child(2) .why-ic{background:var(--turq);color:var(--deep)}
+  .why:nth-child(3) .why-ic{background:var(--deep)}
+  .why:nth-child(4) .why-ic{background:var(--cobalt)}
+  .why h3{font-family:'Playfair Display',serif;font-weight:600;font-size:22px;color:var(--deep);line-height:1.1;margin-bottom:12px}
+  .why p{font-size:14px;font-weight:300;color:var(--ink-soft);line-height:1.65}
 
   /* services */
-  .work-bg{background:var(--ivory)}
   .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px}
-  .svc{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:38px 34px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s}
-  .svc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--ink)}
-  .svc.s2::before{background:var(--steel)}.svc.s3::before{background:var(--black)}
-  .svc.s4::before{background:var(--ink)}.svc.s5::before{background:var(--steel)}.svc.s6::before{background:var(--black)}
-  .svc:hover{transform:translateY(-5px);box-shadow:0 24px 50px -28px rgba(17,18,16,.42)}
-  .svc-idx{font-family:'Fraunces',serif;font-weight:600;font-size:15px;color:var(--ink)}
-  .svc h3{font-size:25px;color:var(--black);margin:20px 0 12px;line-height:1.05}
-  .svc p{font-size:14.5px;font-weight:300;color:#605e58;line-height:1.68}
+  .svc{background:#fff;border:1px solid var(--line);border-radius:20px;padding:38px 34px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s}
+  .svc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--cobalt)}
+  .svc.s2::before{background:var(--turq)}.svc.s3::before{background:var(--deep)}
+  .svc.s4::before{background:var(--cobalt)}.svc.s5::before{background:var(--turq)}.svc.s6::before{background:var(--deep)}
+  .svc:hover{transform:translateY(-5px);box-shadow:0 26px 50px -28px rgba(12,51,84,.34)}
+  .svc h3{font-family:'Playfair Display',serif;font-weight:600;font-size:25px;color:var(--deep);margin:8px 0 12px;line-height:1.08}
+  .svc p{font-size:14.5px;font-weight:300;color:var(--ink-soft);line-height:1.68}
 
   /* gallery */
   .gal{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:160px;gap:18px;margin-top:56px}
-  .tile{border-radius:18px;overflow:hidden;position:relative;background:linear-gradient(135deg,#2c2f31,var(--black))}
+  .tile{border-radius:18px;overflow:hidden;position:relative;background:linear-gradient(150deg,var(--deep),var(--cobalt))}
   .tile img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease;position:relative;z-index:1}
   .tile:hover img{transform:scale(1.05)}
-  .tile .cap{position:absolute;left:0;right:0;bottom:0;padding:22px 22px 18px;background:linear-gradient(to top,rgba(17,18,16,.88),transparent);color:var(--ivory);font-size:12px;letter-spacing:0.1em;text-transform:uppercase;z-index:3;opacity:0;transition:opacity .28s ease}
+  .tile .cap{position:absolute;left:0;right:0;bottom:0;padding:22px;background:linear-gradient(to top,rgba(10,44,73,.9),transparent);color:#fff;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;z-index:3;opacity:0;transition:opacity .28s ease}
   .tile:hover .cap{opacity:1}
-  .tile .ph-lbl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;font-family:'Fraunces',serif;font-size:18px;color:rgba(232,226,213,.42);z-index:0}
-  .t-a{grid-column:span 7;grid-row:span 2}
-  .t-b{grid-column:span 5;grid-row:span 2}
-  .t-c{grid-column:span 4;grid-row:span 2}
-  .t-d{grid-column:span 4;grid-row:span 2}
-  .t-e{grid-column:span 4;grid-row:span 2}
-  .t-f{grid-column:span 5;grid-row:span 2}
-  .t-g{grid-column:span 7;grid-row:span 2}
+  .tile .ph-lbl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;font-family:'Playfair Display',serif;font-size:18px;color:rgba(245,239,227,.5);z-index:0}
+  .t-a{grid-column:span 7;grid-row:span 2}.t-b{grid-column:span 5;grid-row:span 2}
+  .t-c{grid-column:span 4;grid-row:span 2}.t-d{grid-column:span 4;grid-row:span 2}
+  .t-e{grid-column:span 4;grid-row:span 2}.t-f{grid-column:span 5;grid-row:span 2}.t-g{grid-column:span 7;grid-row:span 2}
 
   /* testimonials */
   .quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px}
   .q{border-radius:20px;padding:38px 34px;display:flex;flex-direction:column;min-height:320px}
-  .q1{background:var(--sand)}.q2{background:var(--ink);color:var(--ivory)}.q3{background:var(--ivory);border:1px solid var(--line)}
-  .q .mk{font-family:'Fraunces',serif;font-weight:600;font-size:86px;line-height:.5;height:38px;color:var(--sand-dark)}
-  .q2 .mk{color:rgba(232,226,213,.32)}
-  .q-text{font-family:'Fraunces',serif;font-weight:600;font-size:23px;line-height:1.22;color:var(--black);flex:1;margin-bottom:26px}
-  .q2 .q-text{color:var(--ivory)}
-  .q-text em{font-style:normal;color:var(--ink)}.q2 .q-text em{color:var(--sand)}
+  .q1{background:#fff;border:1px solid var(--line)}.q2{background:var(--deep);color:#fff}.q3{background:var(--sand)}
+  .q .mk{font-family:'Playfair Display',serif;font-weight:700;font-size:86px;line-height:.5;height:38px;color:var(--sand)}
+  .q1 .mk{color:var(--sand)}.q2 .mk{color:rgba(95,194,204,.5)}.q3 .mk{color:#fff}
+  .q-text{font-family:'Playfair Display',serif;font-weight:600;font-size:23px;line-height:1.24;color:var(--deep);flex:1;margin-bottom:26px}
+  .q2 .q-text{color:#fff}
+  .q-text em{font-style:italic;color:var(--cobalt)}.q2 .q-text em{color:var(--turq)}
   .q-by{display:flex;align-items:center;gap:14px}
-  .avatar{width:44px;height:44px;border-radius:50%;background:var(--ink);color:var(--sand);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:16px;flex-shrink:0}
-  .q2 .avatar{background:var(--ivory);color:var(--ink)}
+  .avatar{width:44px;height:44px;border-radius:50%;background:var(--cobalt);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:600;font-size:16px;flex-shrink:0}
+  .q2 .avatar{background:var(--turq);color:var(--deep)}.q3 .avatar{background:var(--deep)}
   .q-name{font-size:14px;font-weight:500}
-  .q-role{font-size:12px;font-weight:300;color:var(--stone);margin-top:2px}
-  .q2 .q-role{color:rgba(232,226,213,.6)}
+  .q-role{font-size:12px;font-weight:300;color:var(--ink-soft);margin-top:2px}
+  .q2 .q-role{color:rgba(245,239,227,.6)}
 
   /* partners */
   .plogos{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;margin-top:52px}
-  .plogo{background:var(--ivory);border:1px solid var(--line);border-radius:16px;height:118px;display:flex;align-items:center;justify-content:center;text-align:center;padding:16px}
-  .plogo span{font-family:'Fraunces',serif;font-weight:600;font-size:17px;color:#7c7a73}
-  .plogo small{display:block;font-family:'DM Sans',sans-serif;font-weight:300;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--stone-lt);margin-top:6px}
+  .plogo{background:#fff;border:1px solid var(--line);border-radius:16px;height:118px;display:flex;align-items:center;justify-content:center;text-align:center;padding:16px}
+  .plogo span{font-family:'Playfair Display',serif;font-weight:600;font-size:17px;color:#9a958a}
+  .plogo small{display:block;font-family:'Outfit',sans-serif;font-weight:300;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:#b6b1a4;margin-top:6px}
 
   /* team */
   .team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px}
-  .member{background:var(--ivory);border:1px solid var(--line);border-radius:20px;padding:40px 34px;border-top:3px solid var(--ink)}
-  .member.m2{border-top-color:var(--steel)}.member.m3{border-top-color:var(--black)}
-  .m-av{width:88px;height:88px;border-radius:50%;background:var(--ink);color:var(--sand);display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:'Fraunces',serif;font-weight:600;font-size:25px;margin-bottom:24px}
+  .member{background:#fff;border:1px solid var(--line);border-radius:20px;padding:40px 34px;border-top:3px solid var(--cobalt)}
+  .member.m2{border-top-color:var(--turq)}.member.m3{border-top-color:var(--deep)}
+  .m-av{width:88px;height:88px;border-radius:50%;background:var(--cobalt);color:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:'Playfair Display',serif;font-weight:600;font-size:25px;margin-bottom:24px}
   .m-av img{width:100%;height:100%;object-fit:cover;display:block}
-  .member.m2 .m-av{background:var(--steel)}.member.m3 .m-av{background:var(--black)}
-  .m-name{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--black)}
-  .m-role{font-size:12.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink);margin-top:7px;font-weight:400}
-  .m-bio{font-size:14.5px;font-weight:300;color:#605e58;line-height:1.68;margin-top:18px}
+  .member.m2 .m-av{background:var(--turq)}.member.m3 .m-av{background:var(--deep)}
+  .m-name{font-family:'Playfair Display',serif;font-weight:600;font-size:24px;color:var(--deep)}
+  .m-role{font-size:12.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--cobalt);margin-top:7px;font-weight:400}
+  .m-bio{font-size:14.5px;font-weight:300;color:var(--ink-soft);line-height:1.68;margin-top:18px}
 
-  /* register */
-  .register{background:var(--ink)}
+  /* register (deep ocean) */
+  .register{position:relative;overflow:hidden}
+  .register .inner{position:relative;z-index:3;padding:104px 0}
   .reg-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:center}
-  .register .eyebrow{color:rgba(232,226,213,.62)}
-  .register h2{font-size:clamp(30px,4.2vw,46px);color:var(--ivory);margin-top:18px;line-height:1.04}
-  .register p{font-size:16.5px;font-weight:300;color:rgba(240,237,229,.84);line-height:1.7;margin-top:20px;max-width:46ch}
-  .reg-form{background:rgba(251,250,246,.07);border:1px solid rgba(251,250,246,.18);border-radius:22px;padding:38px}
-  .reg-form label{font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(232,226,213,.62)}
-  .reg-input{width:100%;margin-top:11px;background:var(--ivory);border:none;border-radius:50px;padding:17px 24px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--black)}
-  .reg-input:focus{outline:2px solid var(--sand)}
-  .reg-form .btn{width:100%;justify-content:center;margin-top:16px;background:var(--black);color:var(--sand)}
-  .reg-form .btn:hover{background:#000}
-  .reg-msg{font-size:13.5px;margin-top:16px;min-height:18px;color:var(--sand)}
-  .reg-fine{font-size:11.5px;color:rgba(232,226,213,.48);margin-top:14px;line-height:1.5}
+  .register .eyebrow{color:var(--turq)}
+  .register h2{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(30px,4.2vw,48px);color:#fff;margin-top:18px;line-height:1.04}
+  .register p{font-size:16.5px;font-weight:300;color:rgba(245,239,227,.86);line-height:1.7;margin-top:20px;max-width:46ch}
+  .reg-form{background:rgba(245,239,227,.08);border:1px solid rgba(245,239,227,.2);border-radius:22px;padding:38px}
+  .reg-form label{font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(245,239,227,.7)}
+  .reg-input{width:100%;margin-top:11px;background:var(--foam);border:none;border-radius:50px;padding:17px 24px;font-family:'Outfit',sans-serif;font-size:15px;color:var(--deep)}
+  .reg-input:focus{outline:2px solid var(--turq)}
+  .reg-form .btn{width:100%;justify-content:center;margin-top:16px;background:var(--turq);color:var(--deep)}
+  .reg-form .btn:hover{background:#7ad3db}
+  .reg-msg{font-size:13.5px;margin-top:16px;min-height:18px;color:var(--turq)}
+  .reg-fine{font-size:11.5px;color:rgba(245,239,227,.5);margin-top:14px;line-height:1.5}
 
-  /* final */
-  .final{background:var(--black);color:var(--ivory);text-align:center}
-  .final h2{font-size:clamp(38px,6vw,76px);line-height:0.98;color:var(--ivory);max-width:15ch;margin:0 auto}
-  .final h2 em{font-style:normal;color:var(--steel)}
-  .final .sub{font-size:18px;font-weight:300;color:rgba(240,237,229,.74);margin:26px auto 40px;max-width:54ch;line-height:1.7}
+  /* final (deep ocean) */
+  .final{position:relative;overflow:hidden;color:#fff;text-align:center}
+  .final .inner{position:relative;z-index:3;padding:120px 0}
+  .final h2{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(38px,6vw,78px);line-height:1.0;color:#fff;max-width:16ch;margin:0 auto}
+  .final h2 em{font-style:italic;font-weight:600;color:var(--turq)}
+  .final .sub{font-size:18px;font-weight:300;color:rgba(245,239,227,.8);margin:26px auto 40px;max-width:54ch;line-height:1.7}
   .final-cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
-  .contact-card{margin:60px auto 0;max-width:560px;background:rgba(251,250,246,.06);border:1px solid rgba(251,250,246,.16);border-radius:22px;padding:32px 36px;display:flex;align-items:center;gap:22px;text-align:left}
-  .contact-card .m-av{margin-bottom:0;flex-shrink:0}
-  .cc-label{font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(232,226,213,.52)}
-  .cc-name{font-family:'Fraunces',serif;font-weight:600;font-size:21px;margin-top:5px}
-  .cc-role{font-size:13px;color:rgba(232,226,213,.72);margin-top:3px}
-  .cc-mail{display:inline-block;margin-top:11px;font-size:14px;color:var(--sand);border-bottom:1px solid rgba(232,226,213,.4);padding-bottom:1px}
+  .contact-card{margin:60px auto 0;max-width:560px;background:rgba(245,239,227,.07);border:1px solid rgba(245,239,227,.18);border-radius:22px;padding:32px 36px;display:flex;align-items:center;gap:22px;text-align:left}
+  .contact-card .m-av{margin-bottom:0;flex-shrink:0;width:72px;height:72px}
+  .cc-label{font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,239,227,.55)}
+  .cc-name{font-family:'Playfair Display',serif;font-weight:600;font-size:21px;margin-top:5px}
+  .cc-role{font-size:13px;color:rgba(245,239,227,.74);margin-top:3px}
+  .cc-mail{display:inline-block;margin-top:11px;font-size:14px;color:var(--turq);border-bottom:1px solid rgba(95,194,204,.5);padding-bottom:1px}
 
   /* footer */
-  footer{background:var(--paper);padding:78px 0 48px;border-top:1px solid var(--line)}
+  footer{background:var(--foam);padding:78px 0 48px;border-top:1px solid var(--line)}
   .foot-eco{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:36px;margin-bottom:54px}
   .foot-brand .logo{font-size:27px;margin-bottom:16px}
-  .foot-brand p{font-size:13.5px;font-weight:300;color:var(--stone);line-height:1.65;max-width:34ch}
-  .foot-col h4{font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--black);margin-bottom:18px;font-family:'DM Sans',sans-serif;font-weight:500}
-  .foot-col a,.foot-col span{display:block;font-size:14px;font-weight:300;color:var(--stone);margin-bottom:12px;transition:color .2s}
-  .foot-col a:hover{color:var(--ink)}
-  .foot-col .tagme{font-size:11px;color:var(--stone-lt)}
+  .foot-brand p{font-size:13.5px;font-weight:300;color:var(--ink-soft);line-height:1.65;max-width:34ch}
+  .foot-col h4{font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--deep);margin-bottom:18px;font-family:'Outfit',sans-serif;font-weight:500}
+  .foot-col a,.foot-col span{display:block;font-size:14px;font-weight:300;color:var(--ink-soft);margin-bottom:12px;transition:color .2s}
+  .foot-col a:hover{color:var(--cobalt)}
+  .foot-col .tagme{font-size:11px;color:#b6b1a4}
   .foot-bot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:28px;flex-wrap:wrap;gap:12px}
-  .foot-bot p{font-size:12.5px;color:var(--stone-lt)}
-  .foot-bot .eco-pill{font-size:12px;color:var(--stone)}
-  .foot-bot .eco-pill b{color:var(--ink);font-weight:500}
+  .foot-bot p{font-size:12.5px;color:#b6b1a4}
+  .foot-bot .eco-pill{font-size:12px;color:var(--ink-soft)}
+  .foot-bot .eco-pill b{color:var(--cobalt);font-weight:500}
 
   .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease}
   .reveal.in{opacity:1;transform:none}
 
   @media(max-width:940px){
-    .feature .wrap{grid-template-columns:1fr;gap:40px}
+    .stats-grid{grid-template-columns:repeat(2,1fr);gap:40px 20px}
+    .stat:nth-child(2)::after{display:none}
     .why-grid{grid-template-columns:1fr 1fr;gap:34px 24px}
     .svc-grid,.quotes,.team-grid{grid-template-columns:1fr 1fr}
     .plogos{grid-template-columns:repeat(3,1fr)}
@@ -226,11 +245,11 @@
   @media(max-width:680px){
     .wrap{padding:0 24px}
     .nav-links{display:none}
-    .nav-links.open{display:flex;position:absolute;top:74px;left:0;right:0;flex-direction:column;background:var(--ivory);padding:24px;gap:20px;border-bottom:1px solid var(--line)}
+    .nav-links.open{display:flex;position:absolute;top:74px;left:0;right:0;flex-direction:column;background:var(--foam);padding:24px;gap:20px;border-bottom:1px solid var(--line)}
     .nav-toggle{display:flex}
-    .hero{padding:72px 0 64px}
     section{padding:80px 0}
     .svc-grid,.quotes,.team-grid,.plogos,.why-grid{grid-template-columns:1fr}
+    .stats-grid{grid-template-columns:1fr 1fr}
     .press-row{flex-wrap:wrap;justify-content:center;gap:14px 26px}
     .gal{grid-template-columns:repeat(2,1fr);grid-auto-rows:150px}
     .gal .tile{grid-column:span 1 !important;grid-row:span 1 !important}
@@ -239,22 +258,6 @@
     .contact-card{flex-direction:column;text-align:center}
   }
 </style>
-<link rel="canonical" href="https://perspectiveevents.eu/">
-<meta name="referrer" content="strict-origin-when-cross-origin">
-<meta name="theme-color" content="#2B5F8E">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Perspective Events">
-<meta property="og:title" content="Perspective Events - Where founders build what's next">
-<meta property="og:description" content="Perspective Events designs and produces summits and experiences for founders, Shopify, and ecommerce brands. Real rooms, real connections.">
-<meta property="og:url" content="https://perspectiveevents.eu/">
-<meta property="og:image" content="https://perspectiveevents.eu/og.png">
-<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Perspective Events - Where founders build what's next">
-<meta name="twitter:description" content="Perspective Events designs and produces summits and experiences for founders, Shopify, and ecommerce brands. Real rooms, real connections.">
-<meta name="twitter:image" content="https://perspectiveevents.eu/og.png">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Perspective Events","url":"https://perspectiveevents.eu/","logo":"https://perspectiveevents.eu/og.png","parentOrganization":{"@type":"Organization","name":"Perspective Circle","url":"https://perspectivecircle.com/"}}</script>
 </head>
 <body>
 
@@ -267,7 +270,6 @@
       <a href="#services">Services</a>
       <a href="#work">Our Work</a>
       <a href="#team">Team</a>
-        <a href="/blog/">Blog</a>
       <a class="btn btn-primary" href="https://calendar.app.google/hm8PjF6P6VYFvWik8" target="_blank" rel="noopener">Book a call</a>
     </nav>
     <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
@@ -277,113 +279,124 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="wrap">
-    <h1 class="reveal in">Where founders build<br>&nbsp;<em>WHAT'S NEXT</em></h1>
-    <p class="hero-kicker reveal in">Summits · Meetups · Private Dinners · Expo</p>
-    <div class="hero-rule reveal in"></div>
-    <p class="hero-sub reveal in">We design and produce the rooms where the right founders, brands and partners meet, from intimate founder dinners to 400-person Shopify and e-commerce gatherings across Europe. Partner with us and your brand sits at the centre of it, on the floor and in the press.</p>
-    <div class="hero-cta reveal in">
-      <a class="btn btn-primary" href="https://calendar.app.google/hm8PjF6P6VYFvWik8" target="_blank" rel="noopener">Book a call →</a>
-      <a class="btn btn-ghost" href="#work">See our work</a>
+  <div class="ocean-bg"><div class="b1"></div><div class="b2"></div><div class="glow"></div></div>
+  <div class="grain"></div>
+  <div class="hero-fade"></div>
+  <div class="hero-in wrap">
+    <p class="eyebrow reveal">Summits · Meetups · Private Dinners · Expo</p>
+    <h1 class="reveal">Where founders<br>build <em>what's next.</em></h1>
+    <div class="hero-rule reveal"></div>
+    <p class="hero-sub reveal">We design and produce the rooms where the right founders, brands and partners meet, from intimate founder dinners to 400-person Shopify and e-commerce gatherings across Europe. Partner with us and your brand sits at the centre of it, on the floor and in the press.</p>
+    <div class="hero-cta reveal">
+      <a class="btn btn-foam" href="https://calendar.app.google/hm8PjF6P6VYFvWik8" target="_blank" rel="noopener">Book a call →</a>
+      <a class="btn btn-onblue-ghost" href="#work">See our work</a>
     </div>
-    <p class="hero-trust reveal in">Trusted by founders and brands from <b>12+ countries</b> across Europe.</p>
+    <p class="hero-trust reveal">Trusted by founders and brands from <b>12+ countries</b> across Europe.</p>
   </div>
 </section>
 
 <!-- PRESS -->
 <div class="press">
   <div class="wrap">
-    <p class="press-lead reveal in">We can feature you <b>in</b></p>
-    <div class="press-row reveal in">
+    <p class="press-lead reveal">We can feature you <b>in</b></p>
+    <div class="press-row reveal">
       <span class="press-name">The Irish Times</span>
       <span class="press-name">Irish Independent</span>
       <span class="press-name">Business Post</span>
       <span class="press-name">Irish Examiner</span>
       <span class="press-name">Irish Tech News</span>
     </div>
-    <p class="press-foot reveal in">Earned and partner-led coverage that puts your brand in front of Europe's founder and e-commerce community.</p>
+    <p class="press-foot reveal">Earned and partner-led coverage that puts your brand in front of Europe's founder and e-commerce community.</p>
   </div>
 </div>
 
 <!-- FEATURE BAND -->
 <div class="feature">
-  <div class="wrap" style="padding-top:104px;padding-bottom:104px">
-    <div class="reveal in">
-      <span class="eyebrow">The room changes everything</span>
-      <h2>The best deals start <em>in person.</em></h2>
-      <p>Online has limits. Rooms don't. The partnerships, hires and clients that move a business forward tend to start with a handshake, a dinner, a conversation that wouldn't have happened over a screen. We build those rooms, and we put our partners right in the middle of them.</p>
-      <a class="btn btn-light" href="https://calendar.app.google/hm8PjF6P6VYFvWik8" target="_blank" rel="noopener">Book a call →</a>
-    </div>
-    <div class="feature-img reveal in">
-      <img src="hero.jpg" alt="A full room at a Perspective Events summit" onerror="this.style.display='none'">
-      <div class="ph">Perspective Events · A full house</div>
-    </div>
+  <div class="ocean-bg"><div class="b1"></div><div class="b2"></div><div class="glow"></div></div>
+  <div class="grain"></div>
+  <div class="inner reveal">
+    <span class="eyebrow">The room changes everything</span>
+    <h2>The best deals start <em>in person.</em></h2>
+    <p>Online has limits. Rooms don't. The partnerships, hires and clients that move a business forward tend to start with a handshake, a dinner, a conversation that wouldn't have happened over a screen. We build those rooms, and we put our partners right in the middle of them.</p>
+    <a class="btn btn-foam" href="https://calendar.app.google/hm8PjF6P6VYFvWik8" target="_blank" rel="noopener">Book a call →</a>
   </div>
 </div>
 
-<!-- WHY PARTNER -->
+<!-- WHY -->
 <section id="why">
   <div class="wrap">
-    <div class="sec-head reveal in"><span class="sec-num">01</span><h2 class="sec-title">Why partner with <em>us</em></h2></div>
-    <p class="sec-intro reveal in">Sponsorship that does more than put a logo on a banner. Every partnership is built to send your brand home with real outcomes.</p>
+    <div class="sec-head reveal"><h2 class="sec-title">Why partner with <em>us</em></h2></div>
+    <p class="sec-intro reveal">Sponsorship that does more than put a logo on a banner. Every partnership is built to send your brand home with real outcomes.</p>
     <div class="why-grid">
-      <div class="why reveal in"><div class="why-ic">01</div><h3>The right room</h3><p>We handpick who's in it. Founders, operators and decision-makers, not a list padded for numbers. Density of ambition is the product.</p></div>
-      <div class="why reveal in"><div class="why-ic">02</div><h3>Real outcomes</h3><p>Our events have sent people home with new partnerships, new hires, new clients and the revenue that followed. Proximity pays.</p></div>
-      <div class="why reveal in"><div class="why-ic">03</div><h3>Press &amp; exposure</h3><p>We don't stop at the door. Partner brands get woven into the content and the earned media around every event.</p></div>
-      <div class="why reveal in"><div class="why-ic">04</div><h3>Done for you</h3><p>Concept, curation, production, day-of and follow-through, handled A to Z. You show up; we run the room.</p></div>
+      <div class="why reveal"><div class="why-ic">01</div><h3>The right room</h3><p>We handpick who's in it. Founders, operators and decision-makers, not a list padded for numbers. Density of ambition is the product.</p></div>
+      <div class="why reveal"><div class="why-ic">02</div><h3>Real outcomes</h3><p>Our events have sent people home with new partnerships, new hires, new clients and the revenue that followed. Proximity pays.</p></div>
+      <div class="why reveal"><div class="why-ic">03</div><h3>Press &amp; exposure</h3><p>We don't stop at the door. Partner brands get woven into the content and the earned media around every event.</p></div>
+      <div class="why reveal"><div class="why-ic">04</div><h3>Done for you</h3><p>Concept, curation, production, day-of and follow-through, handled A to Z. You show up; we run the room.</p></div>
     </div>
-    <div class="hero-cta reveal in" style="margin-top:52px">
-      <a class="btn btn-primary" href="https://calendar.app.google/hm8PjF6P6VYFvWik8" target="_blank" rel="noopener">Book a call →</a>
-    </div>
+    <div class="hero-cta reveal" style="justify-content:flex-start;margin-top:52px"><a class="btn btn-primary" href="https://calendar.app.google/hm8PjF6P6VYFvWik8" target="_blank" rel="noopener">Book a call →</a></div>
   </div>
 </section>
 
 <!-- SERVICES -->
-<section class="work-bg" id="services">
+<section id="services" style="background:#FBF7EE">
   <div class="wrap">
-    <div class="sec-head reveal in"><span class="sec-num">02</span><h2 class="sec-title">What we <em>produce</em></h2></div>
-    <p class="sec-intro reveal in">Every format is built end to end. You bring the brand; we build the room and the moment around it.</p>
+    <div class="sec-head reveal"><h2 class="sec-title">What we <em>produce</em></h2></div>
+    <p class="sec-intro reveal">Every format is built end to end. You bring the brand; we build the room and the moment around it.</p>
     <div class="svc-grid">
-      <div class="svc s1 reveal in"><div class="svc-idx">01</div><h3>Founder Summits</h3><p>Large-format gatherings that put hundreds of founders, operators and partners in one room, programmed for real conversations, not just talks.</p></div>
-      <div class="svc s2 reveal in"><div class="svc-idx">02</div><h3>Shopify &amp; E-commerce Meetups</h3><p>The community events we're known for. Our last brought roughly 400 people from 12+ countries together for the e-commerce scene.</p></div>
-      <div class="svc s3 reveal in"><div class="svc-idx">03</div><h3>Private Founder Dinners</h3><p>Intimate, invite-only tables where the introductions are engineered and the deals tend to start. Seats limited by design.</p></div>
-      <div class="svc s4 reveal in"><div class="svc-idx">04</div><h3>Expo &amp; Corporate Events</h3><p>Stages, booths and brand activations at the shows that matter, produced A to Z so your team just shows up and shines.</p></div>
-      <div class="svc s5 reveal in"><div class="svc-idx">05</div><h3>Partner &amp; Press Features</h3><p>Sponsorship beyond a logo on a banner. We put partner brands into the content, the room and the earned media around the event.</p></div>
-      <div class="svc s6 reveal in"><div class="svc-idx">06</div><h3>Retreats &amp; Team Experiences</h3><p>Off-sites and team experiences designed with the same intention as our summits, for the moments that bond a team and move it forward.</p></div>
+      <div class="svc s1 reveal"><h3>Founder Summits</h3><p>Large-format gatherings that put hundreds of founders, operators and partners in one room, programmed for real conversations, not just talks.</p></div>
+      <div class="svc s2 reveal"><h3>Shopify &amp; E-commerce Meetups</h3><p>The community events we're known for. Our last brought roughly 400 people from 12+ countries together for the e-commerce scene.</p></div>
+      <div class="svc s3 reveal"><h3>Private Founder Dinners</h3><p>Intimate, invite-only tables where the introductions are engineered and the deals tend to start. Seats limited by design.</p></div>
+      <div class="svc s4 reveal"><h3>Expo &amp; Corporate Events</h3><p>Stages, booths and brand activations at the shows that matter, produced A to Z so your team just shows up and shines.</p></div>
+      <div class="svc s5 reveal"><h3>Partner &amp; Press Features</h3><p>Sponsorship beyond a logo on a banner. We put partner brands into the content, the room and the earned media around the event.</p></div>
+      <div class="svc s6 reveal"><h3>Retreats &amp; Team Experiences</h3><p>Off-sites and team experiences designed with the same intention as our summits, for the moments that bond a team and move it forward.</p></div>
     </div>
-    <div class="hero-cta reveal in" style="margin-top:52px">
-      <a class="btn btn-primary" href="https://calendar.app.google/hm8PjF6P6VYFvWik8" target="_blank" rel="noopener">Book a call →</a>
-    </div>
+    <div class="hero-cta reveal" style="justify-content:flex-start;margin-top:52px"><a class="btn btn-primary" href="https://calendar.app.google/hm8PjF6P6VYFvWik8" target="_blank" rel="noopener">Book a call →</a></div>
   </div>
 </section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="ocean-bg"><div class="b1"></div><div class="b2"></div><div class="glow"></div></div>
+  <div class="grain"></div>
+  <div class="inner wrap">
+    <span class="eyebrow reveal">The rooms we've built</span>
+    <div class="stats-grid">
+      <div class="stat reveal"><div class="stat-num">8</div><div class="stat-label">Events produced<br>across Europe</div></div>
+      <div class="stat reveal"><div class="stat-num">400<span class="unit">+</span></div><div class="stat-label">Peak attendees<br>in one room</div></div>
+      <div class="stat reveal"><div class="stat-num">12<span class="unit">+</span></div><div class="stat-label">Countries<br>represented</div></div>
+      <div class="stat reveal"><div class="stat-num serif" style="font-size:clamp(34px,4.4vw,54px)">New</div><div class="stat-label">Partnerships, hires<br>&amp; clients made</div></div>
+    </div>
+    <p class="stats-foot reveal">Our events don't just fill a room. They've sent founders home with <b>new partnerships, new hires, new clients and revenue that followed.</b></p>
+  </div>
+</div>
 
 <!-- OUR WORK -->
 <section id="work">
   <div class="wrap">
-    <div class="sec-head reveal in"><span class="sec-num">03</span><h2 class="sec-title">Our <em>work</em></h2></div>
-    <p class="sec-intro reveal in">Moments from the rooms we've built. Summits, meetups, partner booths and dinners across Europe.</p>
+    <div class="sec-head reveal"><h2 class="sec-title">Our <em>work</em></h2></div>
+    <p class="sec-intro reveal">Moments from the rooms we've built. Summits, meetups, partner booths and dinners across Europe.</p>
     <div class="gal">
-      <div class="tile t-a reveal in"><div class="ph-lbl">The networking floor</div><img loading="lazy" src="ev1.jpg" alt="Founders networking at a Perspective Events event" onerror="this.style.display='none'"><div class="cap">The networking floor</div></div>
-      <div class="tile t-b reveal in"><div class="ph-lbl">On stage</div><img loading="lazy" src="ev2.jpg" alt="Speaker on stage at a Perspective Events event" onerror="this.style.display='none'"><div class="cap">On stage</div></div>
-      <div class="tile t-c reveal in"><div class="ph-lbl">The community</div><img loading="lazy" src="ev3.jpg" alt="Group at the Shopify Meetup Central and Eastern Europe" onerror="this.style.display='none'"><div class="cap">Shopify Meetup · the community</div></div>
-      <div class="tile t-d reveal in"><div class="ph-lbl">At Google Ireland</div><img loading="lazy" src="ev4.jpg" alt="At Google Ireland" onerror="this.style.display='none'"><div class="cap">At Google Ireland</div></div>
-      <div class="tile t-e reveal in"><div class="ph-lbl">On the expo floor</div><img loading="lazy" src="ev5.jpg" alt="On the expo floor at retailARENA" onerror="this.style.display='none'"><div class="cap">On the expo floor</div></div>
-      <div class="tile t-f reveal in"><div class="ph-lbl">Meet the founders</div><img loading="lazy" src="ev6.jpg" alt="Dan Nistor and Cristina Lupu, co-founders of Perspective Events" onerror="this.style.display='none'"><div class="cap">Meet the founders</div></div>
-      <div class="tile t-g reveal in"><div class="ph-lbl">The room, set and ready</div><img loading="lazy" src="ev7.jpg" alt="Event venue interior" onerror="this.style.display='none'"><div class="cap">The room, set and ready</div></div>
+      <div class="tile t-a reveal"><div class="ph-lbl">The networking floor</div><img loading="lazy" src="ev1.jpg" alt="Founders networking at a Perspective Events event" onerror="this.style.display='none'"><div class="cap">The networking floor</div></div>
+      <div class="tile t-b reveal"><div class="ph-lbl">On stage</div><img loading="lazy" src="ev2.jpg" alt="Speaker on stage at a Perspective Events event" onerror="this.style.display='none'"><div class="cap">On stage</div></div>
+      <div class="tile t-c reveal"><div class="ph-lbl">The community</div><img loading="lazy" src="ev3.jpg" alt="Group at the Shopify Meetup Central and Eastern Europe" onerror="this.style.display='none'"><div class="cap">Shopify Meetup · the community</div></div>
+      <div class="tile t-d reveal"><div class="ph-lbl">At Google Ireland</div><img loading="lazy" src="ev4.jpg" alt="At Google Ireland" onerror="this.style.display='none'"><div class="cap">At Google Ireland</div></div>
+      <div class="tile t-e reveal"><div class="ph-lbl">On the expo floor</div><img loading="lazy" src="ev5.jpg" alt="On the expo floor at retailARENA" onerror="this.style.display='none'"><div class="cap">On the expo floor</div></div>
+      <div class="tile t-f reveal"><div class="ph-lbl">Meet the founders</div><img loading="lazy" src="ev6.jpg" alt="Dan Nistor and Cristina Lupu, co-founders of Perspective Events" onerror="this.style.display='none'"><div class="cap">Meet the founders</div></div>
+      <div class="tile t-g reveal"><div class="ph-lbl">The room, set and ready</div><img loading="lazy" src="ev7.jpg" alt="Event venue interior" onerror="this.style.display='none'"><div class="cap">The room, set and ready</div></div>
     </div>
   </div>
 </section>
 
-<!-- STATS / TESTIMONIALS -->
-<section class="work-bg">
+<!-- TESTIMONIALS -->
+<section id="testimonials" style="background:#FBF7EE">
   <div class="wrap">
-    <div class="sec-head reveal in"><span class="sec-num">04</span><h2 class="sec-title">What partners <em>say</em></h2></div>
-    <p class="sec-intro reveal in">From the founders and brands who've been in the room with us. <span style="color:var(--stone-lt)">(Placeholder quotes for now - real partner testimonials drop in here.)</span></p>
+    <div class="sec-head reveal"><h2 class="sec-title">What partners <em>say</em></h2></div>
+    <p class="sec-intro reveal">From the founders and brands who've been in the room with us. <span style="color:#b6b1a4">(Placeholder quotes for now - real partner testimonials drop in here.)</span></p>
     <div class="quotes">
-      <!-- NOTE FOR CRISTINA: replace the 3 quotes below with real partner testimonials. ~12-22 words each. -->
-      <div class="q q1 reveal in"><div class="mk">"</div><div class="q-text">The dinner alone was worth the <em>whole quarter.</em> Two intros there turned into real deals.</div><div class="q-by"><div class="avatar">M</div><div><div class="q-name">Partner testimonial</div><div class="q-role">Founder · E-commerce brand</div></div></div></div>
-      <div class="q q2 reveal in"><div class="mk">"</div><div class="q-text">We sponsored for the logo. We left with <em>three new clients</em> and a hire.</div><div class="q-by"><div class="avatar">S</div><div><div class="q-name">Partner testimonial</div><div class="q-role">Founder · SaaS / Shopify app</div></div></div></div>
-      <div class="q q3 reveal in"><div class="mk">"</div><div class="q-text">Best-run room I've been in this year. <em>The right people,</em> and it felt effortless.</div><div class="q-by"><div class="avatar">A</div><div><div class="q-name">Partner testimonial</div><div class="q-role">Agency lead · Dublin</div></div></div></div>
+      <!-- NOTE FOR CRISTINA: replace the 3 quotes with real partner testimonials. -->
+      <div class="q q1 reveal"><div class="mk">"</div><div class="q-text">The dinner alone was worth the <em>whole quarter.</em> Two intros there turned into real deals.</div><div class="q-by"><div class="avatar">M</div><div><div class="q-name">Partner testimonial</div><div class="q-role">Founder · E-commerce brand</div></div></div></div>
+      <div class="q q2 reveal"><div class="mk">"</div><div class="q-text">We sponsored for the logo. We left with <em>three new clients</em> and a hire.</div><div class="q-by"><div class="avatar">S</div><div><div class="q-name">Partner testimonial</div><div class="q-role">Founder · SaaS / Shopify app</div></div></div></div>
+      <div class="q q3 reveal"><div class="mk">"</div><div class="q-text">Best-run room I've been in this year. <em>The right people,</em> and it felt effortless.</div><div class="q-by"><div class="avatar">A</div><div><div class="q-name">Partner testimonial</div><div class="q-role">Agency lead · Dublin</div></div></div></div>
     </div>
   </div>
 </section>
@@ -391,9 +404,9 @@
 <!-- PARTNERS -->
 <section id="partners">
   <div class="wrap">
-    <div class="sec-head reveal in"><span class="sec-num">05</span><h2 class="sec-title">Trusted by <em>good company</em></h2></div>
-    <p class="sec-intro reveal in">Brands and platforms we've shared the room and the stage with. <span style="color:var(--stone-lt)">(Drop your real partner logos in here, no links.)</span></p>
-    <div class="plogos reveal in">
+    <div class="sec-head reveal"><h2 class="sec-title">Trusted by <em>good company</em></h2></div>
+    <p class="sec-intro reveal">Brands and platforms we've shared the room and the stage with. <span style="color:#b6b1a4">(Drop your real partner logos in here, no links.)</span></p>
+    <div class="plogos reveal">
       <div class="plogo"><span>Your logo<small>Partner</small></span></div>
       <div class="plogo"><span>Your logo<small>Partner</small></span></div>
       <div class="plogo"><span>Your logo<small>Partner</small></span></div>
@@ -409,49 +422,53 @@
 </section>
 
 <!-- TEAM -->
-<section class="work-bg" id="team">
+<section id="team" style="background:#FBF7EE">
   <div class="wrap">
-    <div class="sec-head reveal in"><span class="sec-num">06</span><h2 class="sec-title">The team behind <em>the room</em></h2></div>
-    <p class="sec-intro reveal in">Small team, A-to-Z delivery. We've built every event on this page ourselves, concept to clean-up.</p>
+    <div class="sec-head reveal"><h2 class="sec-title">The team behind <em>the room</em></h2></div>
+    <p class="sec-intro reveal">Small team, A-to-Z delivery. We've built every event on this page ourselves, concept to clean-up.</p>
     <div class="team-grid">
-      <div class="member m1 reveal in"><div class="m-av"><img src="team-dan.jpg" alt="Dan Nistor" loading="lazy"></div><div class="m-name">Dan Nistor</div><div class="m-role">Co-Founder &amp; CEO</div><p class="m-bio">Sets the vision and the standard. The strategy, the partnerships and the why behind every room we build.</p></div>
-      <div class="member m2 reveal in"><div class="m-av"><img src="team-cristina.jpg?v=1781812664290" alt="Cristina Lupu" loading="lazy"></div><div class="m-name">Cristina Lupu</div><div class="m-role">Co-Founder &amp; COO</div><p class="m-bio">Runs the operation end to end. Production, partners and the thousand details that make an event feel effortless.</p></div>
-      <div class="member m3 reveal in"><div class="m-av"><img src="team-narbi.jpg" alt="Narbi Carcal" loading="lazy"></div><div class="m-name">Narbi Carcal</div><div class="m-role">Events Manager</div><p class="m-bio">Coordinates production and logistics across every event, keeping run sheets, suppliers and timelines on track from anywhere.</p></div>
+      <div class="member m1 reveal"><div class="m-av"><img src="team-dan.jpg" alt="Dan Nistor" loading="lazy"></div><div class="m-name">Dan Nistor</div><div class="m-role">Co-Founder &amp; CEO</div><p class="m-bio">Sets the vision and the standard. The strategy, the partnerships and the why behind every room we build.</p></div>
+      <div class="member m2 reveal"><div class="m-av"><img src="team-cristina.jpg" alt="Cristina Lupu" loading="lazy"></div><div class="m-name">Cristina Lupu</div><div class="m-role">Co-Founder &amp; COO</div><p class="m-bio">Runs the operation end to end. Production, partners and the thousand details that make an event feel effortless.</p></div>
+      <div class="member m3 reveal"><div class="m-av"><img src="team-narbi.jpg" alt="Narbi Carcal" loading="lazy"></div><div class="m-name">Narbi Carcal</div><div class="m-role">Events Manager</div><p class="m-bio">Coordinates production and logistics across every event, keeping run sheets, suppliers and timelines on track from anywhere.</p></div>
     </div>
   </div>
 </section>
 
 <!-- REGISTER -->
-<section class="register" id="register">
-  <div class="wrap">
+<div class="register" id="register">
+  <div class="ocean-bg"><div class="b1"></div><div class="b2"></div><div class="glow"></div></div>
+  <div class="grain"></div>
+  <div class="inner wrap">
     <div class="reg-grid">
       <div class="reveal">
         <span class="eyebrow">No event live yet</span>
         <h2>Be first in the room.</h2>
         <p>The next event is in the works. Leave your email and you'll be first to know when applications and partner spots open. No fluff, just the drop.</p>
       </div>
-      <form class="reg-form reveal" id="kForm" novalidate="">
+      <form class="reg-form reveal" id="kForm" novalidate>
         <label for="kEmail">Your email</label>
-        <input class="reg-input" type="email" id="kEmail" name="email" placeholder="you@company.com" required="" autocomplete="email">
+        <input class="reg-input" type="email" id="kEmail" name="email" placeholder="you@company.com" required autocomplete="email">
         <button class="btn" type="submit" id="kBtn">Notify me first →</button>
         <div class="reg-msg" id="kMsg" role="status" aria-live="polite"></div>
         <p class="reg-fine">No spam. Just a heads-up when the next event drops. Unsubscribe anytime.</p>
       </form>
     </div>
   </div>
-</section>
+</div>
 
 <!-- FINAL -->
-<section class="final" id="contact">
-  <div class="wrap">
+<div class="final" id="contact">
+  <div class="ocean-bg"><div class="b1"></div><div class="b2"></div><div class="glow"></div></div>
+  <div class="grain"></div>
+  <div class="inner wrap">
     <h2 class="reveal">Let's build your <em>next room.</em></h2>
     <p class="sub reveal">Partner on an event, host your own, or get your brand in front of Europe's founder community. It starts with a conversation.</p>
     <div class="final-cta reveal">
-      <a class="btn btn-light" href="https://calendar.app.google/hm8PjF6P6VYFvWik8" target="_blank" rel="noopener" style="font-size:14px;padding:17px 34px">Book a call →</a>
-      <a class="btn btn-onblack-ghost" href="#register">Be first to know</a>
+      <a class="btn btn-foam" href="https://calendar.app.google/hm8PjF6P6VYFvWik8" target="_blank" rel="noopener" style="font-size:14px;padding:17px 34px">Book a call →</a>
+      <a class="btn btn-onblue-ghost" href="#register">Be first to know</a>
     </div>
     <div class="contact-card reveal">
-      <div class="m-av" style="margin: 0px; position: relative;"><img src="team-cristina.jpg?v=1781812664290" alt="Cristina Lupu"></div>
+      <div class="m-av" style="margin:0"><img src="team-cristina.jpg" alt="Cristina Lupu"></div>
       <div>
         <div class="cc-label">Or reach out directly</div>
         <div class="cc-name">Cristina Lupu</div>
@@ -460,7 +477,7 @@
       </div>
     </div>
   </div>
-</section>
+</div>
 
 <!-- FOOTER -->
 <footer>
@@ -472,10 +489,7 @@
       </div>
       <div class="foot-col">
         <h4>Explore</h4>
-        <a href="#why">Why us</a>
-        <a href="#services">Services</a>
-        <a href="#work">Our Work</a>
-        <a href="#team">Team</a>
+        <a href="#why">Why us</a><a href="#services">Services</a><a href="#work">Our Work</a><a href="#team">Team</a>
       </div>
       <div class="foot-col">
         <h4>Perspective Circle</h4>
@@ -490,7 +504,7 @@
       </div>
     </div>
     <div class="foot-bot">
-      <p>© <span id="yr">2026</span> Perspective Events · Ireland · Est. 2025</p>
+      <p>© <span id="yr"></span> Perspective Events · Ireland · Est. 2025</p>
       <span class="eco-pill">A sub-brand of <b>Perspective Circle</b></span>
     </div>
   </div>
@@ -504,25 +518,17 @@ nl&&nl.querySelectorAll('a').forEach(function(a){a.addEventListener('click',func
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:0.12});
 document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
 
-/* ════════════════════════════════════════════════════════════
-   KLAVIYO SIGNUP - FILL IN TWO PUBLIC VALUES
-   1. KLAVIYO_PUBLIC_KEY -> your 6-char Public API Key / Site ID
-      (Klaviyo > Settings > API keys > "Public API key / Site ID")
-   2. KLAVIYO_LIST_ID    -> the List ID signups should land in
-      (Klaviyo > Audience > Lists > open the list > ID in the URL)
-   Both are public values, safe to keep in this file. No secret key needed.
-   Until filled, the form shows a friendly fallback message.
-   ════════════════════════════════════════════════════════════ */
+/* Klaviyo (public values) */
 var KLAVIYO_PUBLIC_KEY="RJz7Jx";
-var KLAVIYO_LIST_ID="UbBJXD";   /* "Perspective Events Waitlist" */
+var KLAVIYO_LIST_ID="UbBJXD";   /* Perspective Events Waitlist */
 var form=document.getElementById('kForm'),msg=document.getElementById('kMsg'),btn=document.getElementById('kBtn'),emailEl=document.getElementById('kEmail');
 function valid(e){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);}
 form.addEventListener('submit',function(ev){
   ev.preventDefault();
-  var email=emailEl.value.trim();msg.style.color='var(--sand)';
+  var email=emailEl.value.trim();msg.style.color='var(--turq)';
   if(!valid(email)){msg.style.color='#F2C9C9';msg.textContent='Please enter a valid email address.';return;}
   if(KLAVIYO_PUBLIC_KEY==="KLAVIYO_PUBLIC_KEY"||KLAVIYO_LIST_ID==="KLAVIYO_LIST_ID"){
-    msg.textContent="Thanks, you're on the list. (Add your Klaviyo keys in the code to go live.)";form.reset();return;
+    msg.textContent="Thanks, you're on the list.";form.reset();return;
   }
   btn.disabled=true;btn.textContent='Sending…';
   fetch('https://a.klaviyo.com/client/subscriptions/?company_id='+encodeURIComponent(KLAVIYO_PUBLIC_KEY),{
@@ -531,9 +537,8 @@ form.addEventListener('submit',function(ev){
   }).then(function(r){
     if(r.ok){msg.textContent="You're in. We'll email you the moment the next event opens.";form.reset();}
     else{msg.style.color='#F2C9C9';msg.textContent='Something went wrong. Try again, or email cristina@perspectivecircle.com.';}
-  }).catch(function(){msg.style.color='#F2C9C9';msg.textContent='Network error, please try again in a moment.';}).finally(function(){btn.disabled=false;btn.textContent='Notify me first →';});
+  }).catch(function(){msg.style.color='#F2C9C9';msg.textContent='Network error, please try again.';}).finally(function(){btn.disabled=false;btn.textContent='Notify me first →';});
 });
 </script>
-
-
-<div style="all: initial;"></div><div style="all: initial;"></div></body><div style="all: initial;"></div></html>
+</body>
+</html>
