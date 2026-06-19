@@ -138,10 +138,10 @@ const EDIT_STYLE=`
   [data-plimg-wrap]:hover>.pl-imgbar{opacity:1}
   .pl-imgbar button{font:600 11px/1 sans-serif;border:1px solid #2E2C42;border-radius:5px;padding:5px 8px;cursor:pointer;background:#16142A;color:#E6EDF3}
   .pl-imgbar button:hover{border-color:#C8FF00;color:#C8FF00}
-  .pl-reframe{position:absolute;inset:0;z-index:2147483003;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr 1fr;gap:3px;padding:3px;background:rgba(9,7,15,.32)}
-  .pl-reframe button{border:1px solid rgba(200,255,0,.55);background:rgba(22,20,42,.35);cursor:pointer;border-radius:4px;transition:.1s}
-  .pl-reframe button:hover{background:rgba(200,255,0,.4);border-color:#C8FF00}
-  .pl-reframe button.on{background:rgba(200,255,0,.55)}`;
+  .pl-imgbar button.on{background:#C8FF00;color:#09070F;border-color:#C8FF00}
+  [data-plimg-wrap].pl-reframing{outline:2px solid #C8FF00;outline-offset:-2px}
+  [data-plimg-wrap].pl-reframing>img{cursor:grab}
+  [data-plimg-wrap].pl-reframing>img:active{cursor:grabbing}`;
 
 const BLOCK='h1,h2,h3,h4,h5,h6,p,li,blockquote,figcaption,td,th,dt,dd,summary';
 
@@ -173,6 +173,11 @@ function markText(doc){
   doc.querySelectorAll('a,button').forEach(el=>{ if(el.hasAttribute('data-ple'))return; if(el.closest('[data-ple]')||el.closest('.pl-ui,.pl-sec'))return; if(el.querySelector('img,svg'))return; if(el.textContent.trim()) mk(el); });
   doc.querySelectorAll('span,div').forEach(el=>{ if(el.hasAttribute('data-ple'))return; if(el.children.length===0 && el.textContent.trim() && !el.closest('[data-ple]') && !el.closest('.pl-ui,.pl-sec')) mk(el); });
 }
+function curPos(img){
+  var p=(img.style.objectPosition||'50% 50%').trim().split(/\s+/);
+  var x=parseFloat(p[0]), y=parseFloat(p.length>1?p[1]:p[0]);
+  return [isNaN(x)?50:x, isNaN(y)?50:y];
+}
 function setupImg(doc,img){
   const src=img.getAttribute('src')||'';
   if(/^(https?:)?\/\//i.test(src)||/^data:/.test(src)) return; // external/data — not a repo file
@@ -181,25 +186,38 @@ function setupImg(doc,img){
   let wrap=img.parentElement;
   if(!wrap) return;
   wrap.setAttribute('data-plimg-wrap','1');
+  img.setAttribute('draggable','false');
   if(getComputedStyle(wrap).position==='static') wrap.style.position='relative';
   if(!wrap.querySelector('.pl-imgbar')){
     const bar=doc.createElement('div');bar.className='pl-imgbar';bar.setAttribute('contenteditable','false');
-    bar.appendChild(mkbtn(doc,'Replace','',()=>{pendingImgEl=img;$('imgPicker').click();}));
-    bar.appendChild(mkbtn(doc,'Reframe','',()=>toggleReframe(doc,img,wrap)));
+    bar.appendChild(mkbtn(doc,'Replace','',()=>{if(wrap.classList.contains('pl-reframing'))return;pendingImgEl=img;$('imgPicker').click();}));
+    const rf=mkbtn(doc,'Reframe','',()=>toggleReframe(wrap,rf));
+    bar.appendChild(rf);
     wrap.appendChild(bar);
   }
-  img.addEventListener('click',()=>{ pendingImgEl=img; $('imgPicker').click(); });
+  // drag to reframe (only while in reframe mode)
+  let drag=null;
+  img.addEventListener('pointerdown',e=>{
+    if(!wrap.classList.contains('pl-reframing'))return;
+    e.preventDefault();e.stopPropagation();
+    const pos=curPos(img); drag={sx:e.clientX,sy:e.clientY,px:pos[0],py:pos[1]};
+    try{img.setPointerCapture(e.pointerId);}catch(_){}
+  });
+  img.addEventListener('pointermove',e=>{
+    if(!drag)return; e.preventDefault();
+    const nx=Math.max(0,Math.min(100,drag.px-(e.clientX-drag.sx)*0.32));
+    const ny=Math.max(0,Math.min(100,drag.py-(e.clientY-drag.sy)*0.32));
+    img.style.objectFit='cover'; img.style.objectPosition=nx.toFixed(1)+'% '+ny.toFixed(1)+'%';
+  });
+  const endDrag=()=>{ if(drag){drag=null;setStatus('reframed · keep dragging or click Reframe to lock');} };
+  img.addEventListener('pointerup',endDrag);
+  img.addEventListener('pointercancel',endDrag);
+  img.addEventListener('click',e=>{ if(wrap.classList.contains('pl-reframing')){e.stopPropagation();return;} pendingImgEl=img; $('imgPicker').click(); });
 }
-function toggleReframe(doc,img,wrap){
-  const ex=wrap.querySelector('.pl-reframe'); if(ex){ex.remove();return;}
-  const cur=(img.style.objectPosition||'').trim();
-  const POS=[['0% 0%','top left'],['50% 0%','top'],['100% 0%','top right'],
-             ['0% 50%','left'],['50% 50%','center'],['100% 50%','right'],
-             ['0% 100%','bottom left'],['50% 100%','bottom'],['100% 100%','bottom right']];
-  const grid=doc.createElement('div');grid.className='pl-reframe';grid.setAttribute('contenteditable','false');
-  POS.forEach(p=>{const b=mkbtn(doc,'','',()=>{img.style.objectFit='cover';img.style.objectPosition=p[0];grid.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');setStatus('reframed · '+p[1]);});
-    b.title=p[1]; if(cur===p[0]||(!cur&&p[0]==='50% 50%'))b.classList.add('on'); grid.appendChild(b);});
-  wrap.appendChild(grid);
+function toggleReframe(wrap,btn){
+  const on=wrap.classList.toggle('pl-reframing');
+  if(btn)btn.classList.toggle('on',on);
+  setStatus(on?'drag the photo to reframe · click Reframe again to lock':'reframe locked');
 }
 function mkbtn(doc,label,cls,fn){const b=doc.createElement('button');b.type='button';b.textContent=label;if(cls)b.className=cls;b.addEventListener('click',e=>{e.stopPropagation();e.preventDefault();fn();});return b;}
 function addItemUI(doc,it,wrap,tag,cls){
@@ -251,6 +269,7 @@ $('imgPicker').addEventListener('change',e=>{const f=e.target.files[0];if(!f||!p
 function strip(root,forClone){
   root.querySelectorAll('.pl-ui,.pl-sec,.pl-add,.pl-imgtag,.pl-imgbar,.pl-reframe').forEach(n=>n.remove());
   root.querySelectorAll('[data-plimg-wrap]').forEach(e=>e.removeAttribute('data-plimg-wrap'));
+  root.querySelectorAll('.pl-reframing').forEach(e=>{e.classList.remove('pl-reframing');if(!e.getAttribute('class'))e.removeAttribute('class');});
   root.querySelectorAll('[data-plimg]').forEach(img=>{const s=img.getAttribute('data-plsrc');const nm=img.getAttribute('data-plname');if(s!==null){let out=s;if(nm&&changedImages[nm])out=s.split('?')[0]+'?v='+Date.now();img.setAttribute('src',out);}img.removeAttribute('data-plimg');img.removeAttribute('data-plsrc');img.removeAttribute('data-plname');});
   root.querySelectorAll('[data-plskip]').forEach(e=>e.removeAttribute('data-plskip'));
   root.querySelectorAll('[data-ple]').forEach(e=>{e.removeAttribute('contenteditable');e.removeAttribute('data-ple');});
