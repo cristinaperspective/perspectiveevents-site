@@ -104,7 +104,7 @@
   </div>
 </div>
 
-<input type="file" id="imgPicker" accept="image/*" style="display:none">
+<input type="file" id="imgPicker" accept="image/*" multiple style="display:none">
 
 <script>
 const $=id=>document.getElementById(id);
@@ -140,6 +140,9 @@ const EDIT_STYLE=`
   .pl-imgbar button:hover{border-color:#C8FF00;color:#C8FF00}
   .pl-imgbar button.on{background:#C8FF00;color:#09070F;border-color:#C8FF00}
   .pl-fname{position:absolute;bottom:5px;left:5px;z-index:2147483001;background:rgba(9,7,15,.72);color:#C8FF00;font:600 10px/1 ui-monospace,monospace;padding:3px 6px;border-radius:5px;pointer-events:none;max-width:92%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pl-ui .pl-grip{cursor:grab;font-size:13px}
+  .pl-ui .pl-grip:active{cursor:grabbing}
+  [data-plitem].pl-dragging{opacity:.4;outline:2px dashed #C8FF00;outline-offset:-2px}
   [data-plimg-wrap].pl-reframing{outline:2px solid #C8FF00;outline-offset:-2px}
   [data-plimg-wrap].pl-reframing>img{cursor:grab}
   [data-plimg-wrap].pl-reframing>img:active{cursor:grabbing}`;
@@ -227,12 +230,34 @@ function mkbtn(doc,label,cls,fn){const b=doc.createElement('button');b.type='but
 function addItemUI(doc,it,wrap,tag,cls){
   it.setAttribute('data-plitem','1');
   const bar=doc.createElement('div');bar.className='pl-ui';bar.setAttribute('contenteditable','false');
-  const same=el=>el&&el.tagName===tag&&el.className===cls;
+  const same=el=>el&&el.tagName===tag&&el.className.split(' ')[0]===cls.split(' ')[0];
+  if(it.classList.contains('gal-item')){
+    const grip=mkbtn(doc,'⠿','pl-grip',()=>{});
+    grip.title='Drag to reorder';
+    grip.addEventListener('mousedown',()=>{it.setAttribute('draggable','true');});
+    bar.appendChild(grip);
+    enableDnD(doc,it,wrap);
+  }
   bar.appendChild(mkbtn(doc,'↑','',()=>{const p=it.previousElementSibling;if(same(p))wrap.insertBefore(it,p);}));
   bar.appendChild(mkbtn(doc,'↓','',()=>{const n=it.nextElementSibling;if(same(n))wrap.insertBefore(n,it);}));
   bar.appendChild(mkbtn(doc,'⧉','',()=>dup(doc,it)));
   bar.appendChild(mkbtn(doc,'🗑','pl-del',()=>{if(confirm('Delete this item?'))it.remove();}));
   it.appendChild(bar);
+}
+var dragEl=null;
+function enableDnD(doc,it,wrap){
+  if(it.__dnd)return; it.__dnd=1;
+  it.addEventListener('dragstart',e=>{dragEl=it;it.classList.add('pl-dragging');try{e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain','');}catch(_){}});
+  it.addEventListener('dragend',()=>{it.removeAttribute('draggable');it.classList.remove('pl-dragging');dragEl=null;});
+  if(!wrap.__dnd){ wrap.__dnd=1;
+    wrap.addEventListener('dragover',e=>{
+      if(!dragEl||dragEl.parentNode!==wrap)return; e.preventDefault();
+      const sibs=Array.prototype.slice.call(wrap.children).filter(c=>c!==dragEl&&c.classList&&c.classList.contains('gal-item'));
+      let best=null,bd=Infinity,before=true;
+      sibs.forEach(s=>{const r=s.getBoundingClientRect();const cx=r.left+r.width/2,cy=r.top+r.height/2;const d=Math.hypot(e.clientX-cx,e.clientY-cy);if(d<bd){bd=d;best=s;before=e.clientX<cx;}});
+      if(best){ before?wrap.insertBefore(dragEl,best):wrap.insertBefore(dragEl,best.nextSibling); }
+    });
+  }
 }
 function addSecUI(doc,sec){
   sec.setAttribute('data-plsec','1');
@@ -255,7 +280,7 @@ function detectGroups(doc){
     kids.forEach(it=>{ if(!it.hasAttribute('data-plitem')) addItemUI(doc,it,c,tag,cls); });
     if(!c.nextElementSibling || !c.nextElementSibling.classList || !c.nextElementSibling.classList.contains('pl-add')){
       const add=doc.createElement('button');add.className='pl-add';add.type='button';add.textContent='+ Add';
-      add.addEventListener('click',()=>{const last=[...c.children].filter(k=>k.tagName===tag&&k.className===cls).pop();if(!last)return;const cl=last.cloneNode(true);strip(cl,true);cl.removeAttribute('data-plitem');c.appendChild(cl);injectAll(doc);const ni=cl.querySelector('img');if(ni){pendingImgEl=ni;$('imgPicker').click();}});
+      add.addEventListener('click',()=>{const last=[...c.children].filter(k=>k.tagName===tag&&k.className.split(' ')[0]===cls.split(' ')[0]).pop();if(!last)return;const cl=last.cloneNode(true);strip(cl,true);cl.removeAttribute('data-plitem');c.appendChild(cl);c.removeAttribute('data-plgrp');injectAll(doc);const ni=cl.querySelector('img');if(ni){pendingImgEl=ni;$('imgPicker').click();}});
       c.insertAdjacentElement('afterend',add);
     }
   });
@@ -267,23 +292,43 @@ function injectAll(doc){
   doc.querySelectorAll('section').forEach(sec=>{if(!sec.hasAttribute('data-plsec'))addSecUI(doc,sec);});
   detectGroups(doc);
 }
-function dup(doc,it){const cl=it.cloneNode(true);strip(cl,true);cl.removeAttribute('data-plitem');it.after(cl);injectAll(doc);}
-$('imgPicker').addEventListener('change',e=>{const f=e.target.files[0];if(!f||!pendingImgEl)return;const r=new FileReader();r.onload=()=>{
-  // Always give a replaced/added photo a UNIQUE filename so adding many photos never overwrites another.
-  const ext=(String(f.name).match(/\.[a-z0-9]+$/i)||['.jpg'])[0].toLowerCase();
-  const newName='gal-'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)+ext;
-  pendingImgEl.src=r.result;
-  pendingImgEl.setAttribute('data-plname',newName);
-  pendingImgEl.setAttribute('data-plsrc',newName);
-  changedImages[newName]=r.result;
-  const w=pendingImgEl.closest('[data-plimg-wrap]'); const b=w&&w.querySelector('.pl-fname'); if(b)b.textContent=newName;
-  setStatus('photo staged · '+newName);
-};r.readAsDataURL(f);e.target.value='';});
+function dup(doc,it){const cl=it.cloneNode(true);strip(cl,true);cl.removeAttribute('data-plitem');it.after(cl);if(it.parentNode)it.parentNode.removeAttribute('data-plgrp');injectAll(doc);}
+function uniqueName(f,i){const ext=(String(f&&f.name||'').match(/\.[a-z0-9]+$/i)||['.jpg'])[0].toLowerCase();return 'gal-'+Date.now().toString(36)+(i||0).toString(36)+Math.random().toString(36).slice(2,6)+ext;}
+function applyPhoto(img,f,dataURL,i){
+  // Each added/replaced photo gets a UNIQUE filename so adding many never overwrites another.
+  const newName=uniqueName(f,i);
+  img.src=dataURL;img.setAttribute('data-plimg','1');img.setAttribute('data-plname',newName);img.setAttribute('data-plsrc',newName);
+  changedImages[newName]=dataURL;
+  const w=img.closest('[data-plimg-wrap]');const b=w&&w.querySelector('.pl-fname');if(b)b.textContent=newName;
+}
+$('imgPicker').addEventListener('change',async e=>{
+  const files=Array.prototype.slice.call(e.target.files); if(!files.length||!pendingImgEl)return;
+  const doc=frame.contentDocument;
+  const firstImg=pendingImgEl;
+  const tile=firstImg.closest('[data-plitem]')||firstImg.closest('.gal-item')||firstImg.parentElement;
+  const read=f=>new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(f);});
+  const urls=await Promise.all(files.map(read));
+  applyPhoto(firstImg,files[0],urls[0],0);
+  // Extra files (only meaningful for gallery tiles): clone the tile, insert in order after the previous.
+  const newImgs=[];
+  if(tile&&files.length>1){
+    let prev=tile;
+    for(let i=1;i<files.length;i++){const cl=tile.cloneNode(true);strip(cl,true);cl.removeAttribute('data-plitem');prev.after(cl);prev=cl;newImgs.push(cl.querySelector('img'));}
+    if(tile.parentNode)tile.parentNode.removeAttribute('data-plgrp');
+    injectAll(doc);
+    for(let i=0;i<newImgs.length;i++){if(newImgs[i])applyPhoto(newImgs[i],files[i+1],urls[i+1],i+1);}
+    fitFrame(doc);
+  }
+  setStatus(files.length>1?(files.length+' photos added'):'photo staged');
+  e.target.value='';
+});
 
 function strip(root,forClone){
   root.querySelectorAll('.pl-ui,.pl-sec,.pl-add,.pl-imgtag,.pl-imgbar,.pl-reframe,.pl-fname').forEach(n=>n.remove());
   root.querySelectorAll('[data-plimg-wrap]').forEach(e=>e.removeAttribute('data-plimg-wrap'));
   root.querySelectorAll('.pl-reframing').forEach(e=>{e.classList.remove('pl-reframing');if(!e.getAttribute('class'))e.removeAttribute('class');});
+  root.querySelectorAll('.pl-dragging').forEach(e=>e.classList.remove('pl-dragging'));
+  root.querySelectorAll('[draggable]').forEach(e=>e.removeAttribute('draggable'));
   root.querySelectorAll('[data-plimg]').forEach(img=>{const s=img.getAttribute('data-plsrc');const nm=img.getAttribute('data-plname');if(s!==null){let out=s;if(nm&&changedImages[nm])out=s.split('?')[0]+'?v='+Date.now();img.setAttribute('src',out);}img.removeAttribute('data-plimg');img.removeAttribute('data-plsrc');img.removeAttribute('data-plname');});
   root.querySelectorAll('[data-plskip]').forEach(e=>e.removeAttribute('data-plskip'));
   root.querySelectorAll('[data-ple]').forEach(e=>{e.removeAttribute('contenteditable');e.removeAttribute('data-ple');});
