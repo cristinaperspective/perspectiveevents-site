@@ -152,7 +152,7 @@ frame.addEventListener('load',()=>{
 });
 
 function fitFrame(doc){
-  if(!doc.getElementById('pl-scrollfix')){const s=doc.createElement('style');s.id='pl-scrollfix';s.textContent='html,body{overflow:visible !important;height:auto !important}';doc.head.appendChild(s);}
+  if(!doc.getElementById('pl-scrollfix')){const s=doc.createElement('style');s.id='pl-scrollfix';s.textContent='html,body{overflow:visible !important;height:auto !important}.hero{min-height:0 !important}[style*="vh"]{min-height:0 !important}';doc.head.appendChild(s);}
   const sync=()=>{try{frame.style.height=Math.max(doc.body.scrollHeight,doc.documentElement.scrollHeight)+'px';}catch(e){}};
   sync(); setTimeout(sync,300); setTimeout(sync,1000);
   try{const ro=new ResizeObserver(sync);ro.observe(doc.body);}catch(e){}
