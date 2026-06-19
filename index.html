@@ -290,7 +290,7 @@
   }
 </style>
 <script>if(window.self===window.top)document.documentElement.className+=' js';</script>
-<!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "12831124d638427a8c22472edf87971d"}'></script><!-- End Cloudflare Web Analytics --></head>
+</head>
 <body>
 
 <!-- NAV -->
@@ -574,7 +574,7 @@ if(window.self!==window.top){
   document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
   /* Live site only: duplicate the photos once for a seamless loop. Clones are tagged
      gal-clone + aria-hidden so the next load strips them (no runaway, editor stays clean). */
-  if(gt){Array.prototype.slice.call(gt.children).forEach(function(c){var cl=c.cloneNode(true);cl.classList.add('gal-clone');cl.setAttribute('aria-hidden','true');gt.appendChild(cl);});gm.classList.add('is-live');}
+  if(gt){var orig=Array.prototype.slice.call(gt.children);orig.forEach(function(c){var cl=c.cloneNode(true);cl.classList.add('gal-clone');cl.setAttribute('aria-hidden','true');gt.appendChild(cl);});gt.style.animationDuration=Math.max(30,orig.length*6)+'s';gm.classList.add('is-live');}
 }
 
 /* Klaviyo (public values) */

@@ -139,6 +139,7 @@ const EDIT_STYLE=`
   .pl-imgbar button{font:600 11px/1 sans-serif;border:1px solid #2E2C42;border-radius:5px;padding:5px 8px;cursor:pointer;background:#16142A;color:#E6EDF3}
   .pl-imgbar button:hover{border-color:#C8FF00;color:#C8FF00}
   .pl-imgbar button.on{background:#C8FF00;color:#09070F;border-color:#C8FF00}
+  .pl-fname{position:absolute;bottom:5px;left:5px;z-index:2147483001;background:rgba(9,7,15,.72);color:#C8FF00;font:600 10px/1 ui-monospace,monospace;padding:3px 6px;border-radius:5px;pointer-events:none;max-width:92%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   [data-plimg-wrap].pl-reframing{outline:2px solid #C8FF00;outline-offset:-2px}
   [data-plimg-wrap].pl-reframing>img{cursor:grab}
   [data-plimg-wrap].pl-reframing>img:active{cursor:grabbing}`;
@@ -194,6 +195,9 @@ function setupImg(doc,img){
     const rf=mkbtn(doc,'Reframe','',()=>toggleReframe(wrap,rf));
     bar.appendChild(rf);
     wrap.appendChild(bar);
+  }
+  if(!wrap.querySelector('.pl-fname')){
+    const fn=doc.createElement('div');fn.className='pl-fname';fn.setAttribute('contenteditable','false');fn.textContent=path;wrap.appendChild(fn);
   }
   // drag to reframe (only while in reframe mode)
   let drag=null;
@@ -251,7 +255,7 @@ function detectGroups(doc){
     kids.forEach(it=>{ if(!it.hasAttribute('data-plitem')) addItemUI(doc,it,c,tag,cls); });
     if(!c.nextElementSibling || !c.nextElementSibling.classList || !c.nextElementSibling.classList.contains('pl-add')){
       const add=doc.createElement('button');add.className='pl-add';add.type='button';add.textContent='+ Add';
-      add.addEventListener('click',()=>{const last=[...c.children].filter(k=>k.tagName===tag&&k.className===cls).pop();if(!last)return;const cl=last.cloneNode(true);strip(cl,true);cl.removeAttribute('data-plitem');c.appendChild(cl);injectAll(doc);});
+      add.addEventListener('click',()=>{const last=[...c.children].filter(k=>k.tagName===tag&&k.className===cls).pop();if(!last)return;const cl=last.cloneNode(true);strip(cl,true);cl.removeAttribute('data-plitem');c.appendChild(cl);injectAll(doc);const ni=cl.querySelector('img');if(ni){pendingImgEl=ni;$('imgPicker').click();}});
       c.insertAdjacentElement('afterend',add);
     }
   });
@@ -264,10 +268,20 @@ function injectAll(doc){
   detectGroups(doc);
 }
 function dup(doc,it){const cl=it.cloneNode(true);strip(cl,true);cl.removeAttribute('data-plitem');it.after(cl);injectAll(doc);}
-$('imgPicker').addEventListener('change',e=>{const f=e.target.files[0];if(!f||!pendingImgEl)return;const r=new FileReader();r.onload=()=>{const name=pendingImgEl.getAttribute('data-plname');pendingImgEl.src=r.result;changedImages[name]=r.result;setStatus('photo staged');};r.readAsDataURL(f);e.target.value='';});
+$('imgPicker').addEventListener('change',e=>{const f=e.target.files[0];if(!f||!pendingImgEl)return;const r=new FileReader();r.onload=()=>{
+  // Always give a replaced/added photo a UNIQUE filename so adding many photos never overwrites another.
+  const ext=(String(f.name).match(/\.[a-z0-9]+$/i)||['.jpg'])[0].toLowerCase();
+  const newName='gal-'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)+ext;
+  pendingImgEl.src=r.result;
+  pendingImgEl.setAttribute('data-plname',newName);
+  pendingImgEl.setAttribute('data-plsrc',newName);
+  changedImages[newName]=r.result;
+  const w=pendingImgEl.closest('[data-plimg-wrap]'); const b=w&&w.querySelector('.pl-fname'); if(b)b.textContent=newName;
+  setStatus('photo staged · '+newName);
+};r.readAsDataURL(f);e.target.value='';});
 
 function strip(root,forClone){
-  root.querySelectorAll('.pl-ui,.pl-sec,.pl-add,.pl-imgtag,.pl-imgbar,.pl-reframe').forEach(n=>n.remove());
+  root.querySelectorAll('.pl-ui,.pl-sec,.pl-add,.pl-imgtag,.pl-imgbar,.pl-reframe,.pl-fname').forEach(n=>n.remove());
   root.querySelectorAll('[data-plimg-wrap]').forEach(e=>e.removeAttribute('data-plimg-wrap'));
   root.querySelectorAll('.pl-reframing').forEach(e=>{e.classList.remove('pl-reframing');if(!e.getAttribute('class'))e.removeAttribute('class');});
   root.querySelectorAll('[data-plimg]').forEach(img=>{const s=img.getAttribute('data-plsrc');const nm=img.getAttribute('data-plname');if(s!==null){let out=s;if(nm&&changedImages[nm])out=s.split('?')[0]+'?v='+Date.now();img.setAttribute('src',out);}img.removeAttribute('data-plimg');img.removeAttribute('data-plsrc');img.removeAttribute('data-plname');});
