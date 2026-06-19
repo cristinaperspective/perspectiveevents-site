@@ -1,0 +1,12 @@
+/
+  Cache-Control: no-store, must-revalidate
+/index.html
+  Cache-Control: no-store, must-revalidate
+/editor.html
+  Cache-Control: no-store, must-revalidate
+/blog-admin.html
+  Cache-Control: no-store, must-revalidate
+/blog/
+  Cache-Control: no-store, must-revalidate
+/*.html
+  Cache-Control: no-store, must-revalidate
