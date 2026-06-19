@@ -206,7 +206,8 @@
   .m-bio{font-size:14.5px;font-weight:300;color:var(--ink-soft);line-height:1.68;margin-top:18px}
 
   /* register (deep ocean) */
-  .register{position:relative;overflow:hidden}
+  .deep-block{position:relative;overflow:hidden}
+  .register{position:relative}
   .register .inner{position:relative;z-index:3;padding:104px 0}
   .reg-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:center}
   .register .eyebrow{color:var(--turq)}
@@ -222,7 +223,7 @@
   .reg-fine{font-size:11.5px;color:rgba(245,239,227,.5);margin-top:14px;line-height:1.5}
 
   /* final (deep ocean) */
-  .final{position:relative;overflow:hidden;color:#fff;text-align:center}
+  .final{position:relative;color:#fff;text-align:center}
   .final .inner{position:relative;z-index:3;padding:120px 0}
   .final h2{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(38px,6vw,78px);line-height:1.0;color:#fff;max-width:16ch;margin:0 auto}
   .final h2 em{font-style:italic;font-weight:600;color:var(--turq)}
@@ -249,7 +250,8 @@
   .foot-bot .eco-pill{font-size:12px;color:var(--ink-soft)}
   .foot-bot .eco-pill b{color:var(--cobalt);font-weight:500}
 
-  .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease}
+  .reveal{transition:opacity .8s ease,transform .8s ease}
+  .js .reveal{opacity:0;transform:translateY(24px)}
   .reveal.in{opacity:1;transform:none}
 
   @media(max-width:940px){
@@ -277,6 +279,7 @@
     .contact-card{flex-direction:column;text-align:center}
   }
 </style>
+<script>if(window.self===window.top)document.documentElement.className+=' js';</script>
 </head>
 <body>
 
@@ -463,10 +466,12 @@
   </div>
 </section>
 
-<!-- REGISTER -->
-<div class="register" id="register">
+<!-- REGISTER + FINAL: one continuous dark block, single shared background (no seam) -->
+<div class="deep-block">
   <div class="ocean-bg"><div class="cau"><span></span><span></span><span></span></div><div class="caustex"></div><div class="vignette"></div></div>
   <div class="grain"></div>
+
+  <div class="register" id="register">
   <div class="inner wrap">
     <div class="reg-grid">
       <div class="reveal">
@@ -483,12 +488,9 @@
       </form>
     </div>
   </div>
-</div>
+  </div>
 
-<!-- FINAL -->
-<div class="final" id="contact">
-  <div class="ocean-bg"><div class="cau"><span></span><span></span><span></span></div><div class="caustex"></div><div class="vignette"></div></div>
-  <div class="grain"></div>
+  <div class="final" id="contact">
   <div class="inner wrap">
     <h2 class="reveal">Let's build your <em>next room.</em></h2>
     <p class="sub reveal">Partner on an event, host your own, or get your brand in front of Europe's founder community. It starts with a conversation.</p>
@@ -506,6 +508,7 @@
       </div>
     </div>
   </div>
+</div>
 </div>
 
 <!-- FOOTER -->
