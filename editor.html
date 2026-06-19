@@ -56,7 +56,7 @@
 
 <div class="bar">
   <div class="brand">Perspective<b>Events</b> · Editor</div>
-  <span class="hint">Click <b>text</b> to edit · hover a <b>photo</b> for <b>Replace / Reframe</b> · hover a <b>card/section</b> for ↑↓ ⧉ 🗑 · <b>+ Add</b></span>
+  <span class="hint">Click <b>text</b> to edit · hover a <b>photo</b> for <b>Replace / Reframe / − +</b> (size) · hover a <b>card/section</b> for ↑↓ ⧉ 🗑 · <b>+ Add</b></span>
   <span class="spacer"></span>
   <span class="status" id="status">loading…</span>
   <a class="btn" href="https://perspectivecircle.com/analytics.html" target="_blank" rel="noopener" style="text-decoration:none">📊 Analytics</a>
@@ -198,6 +198,9 @@ function setupImg(doc,img){
     bar.appendChild(mkbtn(doc,'Replace','',()=>{if(wrap.classList.contains('pl-reframing'))return;pendingImgEl=img;$('imgPicker').click();}));
     const rf=mkbtn(doc,'Reframe','',()=>toggleReframe(wrap,rf));
     bar.appendChild(rf);
+    const minus=mkbtn(doc,'−','',()=>setScale(img,getScale(img)-0.1)); minus.title='Smaller';
+    const plus=mkbtn(doc,'+','',()=>setScale(img,getScale(img)+0.1)); plus.title='Bigger';
+    bar.appendChild(minus); bar.appendChild(plus);
     wrap.appendChild(bar);
   }
   if(!wrap.querySelector('.pl-fname')){
@@ -226,6 +229,14 @@ function toggleReframe(wrap,btn){
   const on=wrap.classList.toggle('pl-reframing');
   if(btn)btn.classList.toggle('on',on);
   setStatus(on?'drag the photo to reframe · click Reframe again to lock':'reframe locked');
+}
+/* Per-image size: zoom a logo or photo in/out, kept as an inline transform:scale (persists on publish). */
+function getScale(img){var m=(img.style.transform||'').match(/scale\(([0-9.]+)\)/);return m?parseFloat(m[1]):1;}
+function setScale(img,v){
+  v=Math.max(0.4,Math.min(3,Math.round(v*100)/100));
+  var tf=(img.style.transform||'').replace(/scale\([0-9.]+\)\s*/,'').trim();
+  img.style.transform=(tf?tf+' ':'')+'scale('+v+')';
+  setStatus('size '+Math.round(v*100)+'%');
 }
 function mkbtn(doc,label,cls,fn){const b=doc.createElement('button');b.type='button';b.textContent=label;if(cls)b.className=cls;b.addEventListener('click',e=>{e.stopPropagation();e.preventDefault();fn();});return b;}
 function addItemUI(doc,it,wrap,tag,cls){
