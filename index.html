@@ -53,11 +53,11 @@
   .ocean-bg{position:absolute;inset:0;overflow:hidden;background:#0A2A44}
   .ocean-bg .cau{position:absolute;inset:-30%;z-index:1}
   .ocean-bg .cau span{position:absolute;border-radius:50%;filter:blur(58px);mix-blend-mode:screen}
-  .ocean-bg .cau span:nth-child(1){width:62%;height:62%;left:0%;top:-8%;background:radial-gradient(circle,rgba(52,178,224,.72),transparent 66%);animation:cau1 14s ease-in-out infinite alternate}
-  .ocean-bg .cau span:nth-child(2){width:54%;height:54%;right:-6%;top:14%;background:radial-gradient(circle,rgba(120,214,224,.68),transparent 66%);animation:cau2 18s ease-in-out infinite alternate}
-  .ocean-bg .cau span:nth-child(3){width:68%;height:68%;left:20%;bottom:-22%;background:radial-gradient(circle,rgba(38,128,196,.72),transparent 66%);animation:cau3 16s ease-in-out infinite alternate}
+  .ocean-bg .cau span:nth-child(1){width:62%;height:62%;left:0%;top:-8%;background:radial-gradient(circle,rgba(52,178,224,.55),transparent 66%);transform:translate(10%,6%) scale(1.12)}
+  .ocean-bg .cau span:nth-child(2){width:54%;height:54%;right:-6%;top:14%;background:radial-gradient(circle,rgba(120,214,224,.5),transparent 66%);transform:translate(-8%,-4%) scale(1.08)}
+  .ocean-bg .cau span:nth-child(3){width:68%;height:68%;left:20%;bottom:-22%;background:radial-gradient(circle,rgba(38,128,196,.55),transparent 66%);transform:translate(6%,-8%) scale(1.16)}
   .ocean-bg .caustex{position:absolute;inset:-25%;z-index:1;mix-blend-mode:screen;opacity:.3;background-size:cover;background-position:center;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 700 700'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='2' seed='6' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.42 0 0 0 0 0.78 0 0 0 0 0.86 0 0 0 1.15 -0.34'/%3E%3C/filter%3E%3Crect width='700' height='700' filter='url(%23c)'/%3E%3C/svg%3E");animation:caustex 22s ease-in-out infinite}
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 700 700'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='2' seed='6' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.42 0 0 0 0 0.78 0 0 0 0 0.86 0 0 0 1.15 -0.34'/%3E%3C/filter%3E%3Crect width='700' height='700' filter='url(%23c)'/%3E%3C/svg%3E")}
   .ocean-bg .vignette{position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(90deg, rgba(5,16,28,.4) 0%, transparent 16%, transparent 84%, rgba(5,16,28,.4) 100%)}
   @keyframes cau1{0%{transform:translate(-12%,-8%) scale(1)}100%{transform:translate(34%,24%) scale(1.4)}}
   @keyframes cau2{0%{transform:translate(14%,8%) scale(1.3)}100%{transform:translate(-32%,-20%) scale(1)}}
@@ -91,7 +91,7 @@
   .hero-in{position:relative;z-index:3;width:100%}
   .hero .eyebrow{color:rgba(245,239,227,.85)}
   .hero h1{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(50px,8.4vw,112px);line-height:0.98;margin:26px 0 0;color:#fff;text-shadow:0 4px 50px rgba(6,26,40,.4)}
-  .hero h1 em{font-style:italic;font-weight:600}
+  .hero h1 em{font-style:italic;font-weight:600;color:var(--turq)}
   .hero-rule{width:64px;height:2px;background:var(--turq);border-radius:2px;margin:34px auto 26px}
   .hero-sub{font-size:clamp(16px,2vw,20px);font-weight:300;color:rgba(245,239,227,.9);max-width:60ch;margin:0 auto;line-height:1.65}
   .hero-cta{display:flex;gap:16px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:42px}
@@ -157,6 +157,13 @@
   .svc p{font-size:14.5px;font-weight:300;color:var(--ink-soft);line-height:1.68}
 
   /* gallery */
+  .gal-marquee{margin-top:56px;overflow:hidden;position:relative;-webkit-mask:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);mask:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
+  .gal-track{display:flex;gap:18px;width:max-content;animation:galmarq 55s linear infinite}
+  .gal-marquee:hover .gal-track{animation-play-state:paused}
+  @keyframes galmarq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .gal-item{flex:0 0 auto;width:400px;height:270px;border-radius:18px;overflow:hidden;background:linear-gradient(150deg,var(--deep),var(--cobalt))}
+  .gal-item img{width:100%;height:100%;object-fit:cover;display:block}
+  @media(max-width:680px){.gal-item{width:300px;height:210px}}
   .gal{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:160px;gap:18px;margin-top:56px}
   .tile{border-radius:18px;overflow:hidden;position:relative;background:linear-gradient(150deg,var(--deep),var(--cobalt))}
   .tile img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease;position:relative;z-index:1}
@@ -251,7 +258,6 @@
   .foot-bot .eco-pill b{color:var(--cobalt);font-weight:500}
 
   .reveal{transition:opacity .8s ease,transform .8s ease}
-  .js .reveal{opacity:0;transform:translateY(24px)}
   .reveal.in{opacity:1;transform:none}
 
   @media(max-width:940px){
@@ -398,14 +404,25 @@
   <div class="wrap">
     <div class="sec-head reveal"><h2 class="sec-title">Our <em>work</em></h2></div>
     <p class="sec-intro reveal">Moments from the rooms we've built. Summits, meetups, partner booths and dinners across Europe.</p>
-    <div class="gal">
-      <div class="tile t-a reveal"><div class="ph-lbl">The networking floor</div><img loading="lazy" src="ev1.jpg" alt="Founders networking at a Perspective Events event" onerror="this.style.display='none'"><div class="cap">The networking floor</div></div>
-      <div class="tile t-b reveal"><div class="ph-lbl">On stage</div><img loading="lazy" src="ev2.jpg" alt="Speaker on stage at a Perspective Events event" onerror="this.style.display='none'"><div class="cap">On stage</div></div>
-      <div class="tile t-c reveal"><div class="ph-lbl">The community</div><img loading="lazy" src="ev3.jpg" alt="Group at the Shopify Meetup Central and Eastern Europe" onerror="this.style.display='none'"><div class="cap">Shopify Meetup · the community</div></div>
-      <div class="tile t-d reveal"><div class="ph-lbl">At Google Ireland</div><img loading="lazy" src="ev4.jpg" alt="At Google Ireland" onerror="this.style.display='none'"><div class="cap">At Google Ireland</div></div>
-      <div class="tile t-e reveal"><div class="ph-lbl">On the expo floor</div><img loading="lazy" src="ev5.jpg" alt="On the expo floor at retailARENA" onerror="this.style.display='none'"><div class="cap">On the expo floor</div></div>
-      <div class="tile t-f reveal"><div class="ph-lbl">Meet the founders</div><img loading="lazy" src="ev6.jpg" alt="Dan Nistor and Cristina Lupu, co-founders of Perspective Events" onerror="this.style.display='none'"><div class="cap">Meet the founders</div></div>
-      <div class="tile t-g reveal"><div class="ph-lbl">The room, set and ready</div><img loading="lazy" src="ev7.jpg" alt="Event venue interior" onerror="this.style.display='none'"><div class="cap">The room, set and ready</div></div>
+    <!-- Infinite photo slider. Add more photos by adding .gal-item blocks to BOTH halves (keep the two halves identical for a seamless loop). -->
+    <div class="gal-marquee reveal">
+      <div class="gal-track">
+        <div class="gal-item"><img loading="lazy" src="ev1.jpg" alt="Perspective Events"></div>
+        <div class="gal-item"><img loading="lazy" src="ev2.jpg" alt="Perspective Events"></div>
+        <div class="gal-item"><img loading="lazy" src="ev3.jpg" alt="Perspective Events"></div>
+        <div class="gal-item"><img loading="lazy" src="ev4.jpg" alt="Perspective Events"></div>
+        <div class="gal-item"><img loading="lazy" src="ev5.jpg" alt="Perspective Events"></div>
+        <div class="gal-item"><img loading="lazy" src="ev6.jpg" alt="Perspective Events"></div>
+        <div class="gal-item"><img loading="lazy" src="ev7.jpg" alt="Perspective Events"></div>
+        <!-- second identical half -->
+        <div class="gal-item"><img loading="lazy" src="ev1.jpg" alt="Perspective Events"></div>
+        <div class="gal-item"><img loading="lazy" src="ev2.jpg" alt="Perspective Events"></div>
+        <div class="gal-item"><img loading="lazy" src="ev3.jpg" alt="Perspective Events"></div>
+        <div class="gal-item"><img loading="lazy" src="ev4.jpg" alt="Perspective Events"></div>
+        <div class="gal-item"><img loading="lazy" src="ev5.jpg" alt="Perspective Events"></div>
+        <div class="gal-item"><img loading="lazy" src="ev6.jpg" alt="Perspective Events"></div>
+        <div class="gal-item"><img loading="lazy" src="ev7.jpg" alt="Perspective Events"></div>
+      </div>
     </div>
   </div>
 </section>
